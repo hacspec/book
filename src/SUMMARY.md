@@ -5,7 +5,7 @@
     - [Core](./language/core.md)
     - [Arithmetic](./language/arithmetic.md)
     - [Sequences and arrays](./language/seq.md)
-    - [Struct and enums](./language/enums.md)
+    - [Structs and enums](./language/enums.md)
     - [Error handling](./language/errors.md)
 - [The hacspec std library](./std/readme.md)
 - [Examples](./examples/readme.md)
