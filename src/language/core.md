@@ -92,7 +92,7 @@ claim of forbidding mutable state. But in fact, mutable local variables in
 hacspec can be translated to a completely side-effect free form with a state-passing
 like monadic structure.
 
-Left-hand sides of assignment support destructuring, which is currently the
+Left-hand sides of assignments support destructuring, which is currently the
 only way to access the members of a tuple:
 
 ```rust, noplaypen
