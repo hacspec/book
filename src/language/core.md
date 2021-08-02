@@ -101,7 +101,7 @@ let (x, y) = z;
 
 ## Loops
 
-Looping is severely restricted in hacspec, as the only accepted form is
+Looping is severely restricted in hacspec compared to Rust, as the only accepted form is
 `for` looping with a counter over an integer range:
 
 ```rust, noplaypen
