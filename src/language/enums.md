@@ -60,10 +60,9 @@ match x {
 }
 ```
 
-Such type parameters declaration is cumbersome; as a workaround we advice
+Such type parameter declaration is cumbersome; as a workaround we advise
 to declare a type alias as such:
 
 ```rust, noplaypen
 type MyResult = Result::<Seq<u8>, bool>;
 ```
-
