@@ -1,4 +1,4 @@
-# Struct and enums
+# Structs and enums
 
 hacspec also supports user-defined structs and enums with some restrictions.
 
