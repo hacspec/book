@@ -3,7 +3,7 @@
 ## Sequences
 
 The staple `Vec` type is forbidden in hacspec. Instead, you have to use the
-type `Seq`, which is implemented as a wrapper around `Seq`.
+type `Seq`, which is implemented as a wrapper around `Vec`.
 
 The most notable differences between `Seq` and `Vec` is that `Seq` is not
 resizable, and does not support `push` and `pop` operations. Instead, the
@@ -29,5 +29,4 @@ array!(BazArray, u8, 64, type_for_indexes:BazIndex);
 // intended to spot which usizes are used to index BazArray (useful for
 // verification)
 ```
-
 
