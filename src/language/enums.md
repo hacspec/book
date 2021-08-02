@@ -23,7 +23,7 @@ need for lifetime variables.
 
 ## Enums
 
-hacspec supports the basic `enum` declarations of Rust:
+hacspec supports very restricted `enum` declarations:
 
 ```rust, noplaypen
 enum Foo {
@@ -32,6 +32,9 @@ enum Foo {
     CaseC(Seq<bool>, u64)
 }
 ```
+
+These declaration don't support the basic Rust features such as C-style
+union declarations with assignments for each case.
 
 Enumeration values can be pattern-matched in an expression:
 

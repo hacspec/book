@@ -31,10 +31,15 @@ fn hacspec_function(x: bool) -> () {
 The functions can take any number of arguments, and may return a value (or not).
 Note that recursive functions are forbidden in hacspec.
 
+The control flow inside hacspec functions is limited, as `return` statements
+are forbidden.
+
 ## Basic Types
 
 hacspec supports all the Rust primitive types: integers (signed and unsigned),
-booleans, unit, tuples.
+booleans, unit, tuples. hacspec possesses some support for generic
+types, but only for primitive types defined by the language creators, and
+not for user-defined types.
 
 Type aliases are allowed in hacspec:
 
@@ -88,7 +93,7 @@ x = ...;
 ```
 
 This allowing of mutable variable might come as a contradiction to hacspec's
-claim of forbidding mutable state. But in fact, mutable local variables in
+philosophy of forbidding mutable state. But in fact, mutable local variables in
 hacspec can be translated to a completely side-effect free form with a state-passing
 like monadic structure.
 
@@ -111,7 +116,7 @@ for i in low..hi {
 ```
 
 The motivation for this restriction is to ease the proof of termination of
-loops.
+loops. `break` or `continue` statements are forbidden.
 
 ## Conditionals
 

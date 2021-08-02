@@ -10,7 +10,7 @@ resizable, and does not support `push` and `pop` operations. Instead, the
 final length of the seq has to be provided at creation time. See the
 hacspec standard library documentation for more details.
 
-`Seq` is a generic type that always has to be indexed by the content of the
+`Seq` is a built-in generic type that always has to be indexed by the content of the
 cells: `Seq<u8>`, etc.
 
 ## Arrays

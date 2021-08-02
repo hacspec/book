@@ -12,3 +12,5 @@ reassignment statement:
 let x = foo(true)?; // GOOD
 let y = foo(bar(0)?); // ERROR: the ? is not at the end of the statement
 ```
+
+Currently, `?` is the only way to return early in a hacspec function.
