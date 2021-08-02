@@ -44,7 +44,7 @@ type FooAlias = u32;
 
 ## Borrows
 
-hacspec forbids mutable borrows at all places. Immutable borrows are allowed
+hacspec forbids mutable borrows in all places. Immutable borrows are allowed
 in hacspec, but only for function arguments. Indeed, you can declare a function
 argument as immutably borrowed:
 
