@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="language/index.html"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="language/specification.html"><strong aria-hidden="true">2.1.</strong> Specification</a></li></ol></li><li class="chapter-item expanded "><a href="std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li class="chapter-item expanded "><a href="examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="usage/verification.html"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="misc/contributors.html">Contributors</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="language/index.html"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="language/core.html"><strong aria-hidden="true">2.1.</strong> Core</a></li><li class="chapter-item expanded "><a href="language/seq.html"><strong aria-hidden="true">2.2.</strong> Sequences and arrays</a></li><li class="chapter-item expanded "><a href="language/enums.html"><strong aria-hidden="true">2.3.</strong> Structs and enums</a></li><li class="chapter-item expanded "><a href="language/errors.html"><strong aria-hidden="true">2.4.</strong> Error handling</a></li></ol></li><li class="chapter-item expanded "><a href="std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="language/arithmetic.html"><strong aria-hidden="true">3.1.</strong> Arithmetic</a></li></ol></li><li class="chapter-item expanded "><a href="examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="usage/verification.html"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="misc/contributors.html">Contributors</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -145,22 +145,24 @@
                     <main>
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>hacspec is a specification language for crypto primitives, protocols, and more.
-It is a subset of the <a href="https://www.rust-lang.org/">Rust</a> programming language.</p>
-<p>This book gives an overview of</p>
+It is a subset of the <a href="https://www.rust-lang.org/">Rust</a> programming language, focused on functional
+programming and it avoids the use of mutable state as much as possible.</p>
+<p>This book gives an overview of:</p>
 <ul>
-<li><a href="./language">the hacspec language</a></li>
-<li>the different parts of the project
+<li><a href="./language">The hacspec language</a>;</li>
+<li>The different parts of the project:
 <ul>
-<li><a href="./std">the standard library</a></li>
-<li><a href="./examples">examples</a></li>
+<li><a href="./std">the standard library</a>,</li>
+<li><a href="./examples">examples of hacspec programs</a>;</li>
 </ul>
 </li>
-<li>how to use hacspec to write <a href="./usage/specifications.html">specifications</a> for standards and <a href="./usage/verification.html">verification</a></li>
-<li>how to use hacspec to generate <a href="./usage/test_vectors.html">test vectors</a></li>
-<li><a href="./developers/">work on hacspec itself</a></li>
+<li>How to use hacspec to write <a href="./usage/specifications.html">specifications</a> for standards and <a href="./usage/verification.html">verification</a>;</li>
+<li>How to use hacspec to generate <a href="./usage/test_vectors.html">test vectors</a>;</li>
+<li><a href="./developers">Work on the hacspec compiler and tooling itself</a>.</li>
 </ul>
 <p>For a quick introduction you can also check out these <a href="https://raw.githubusercontent.com/hacspec/hacspec/master/presentation_slides.pdf">slides</a> from April 2021.
-An in-depth <a href="https://hal.inria.fr/hal-03176482">technical report</a> is also available.</p>
+An in-depth <a href="https://hal.inria.fr/hal-03176482">technical report</a> is also available, and serves as a reference
+for the language formalization.</p>
 
                     </main>
 

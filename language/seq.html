@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Verification - hacspec</title>
+        <title>Sequences and arrays - hacspec</title>
                 
 
         <!-- Custom HTML head -->
@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../language/index.html"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/core.html"><strong aria-hidden="true">2.1.</strong> Core</a></li><li class="chapter-item expanded "><a href="../language/seq.html"><strong aria-hidden="true">2.2.</strong> Sequences and arrays</a></li><li class="chapter-item expanded "><a href="../language/enums.html"><strong aria-hidden="true">2.3.</strong> Structs and enums</a></li><li class="chapter-item expanded "><a href="../language/errors.html"><strong aria-hidden="true">2.4.</strong> Error handling</a></li></ol></li><li class="chapter-item expanded "><a href="../std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/arithmetic.html"><strong aria-hidden="true">3.1.</strong> Arithmetic</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="../usage/verification.html" class="active"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="../usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="../developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../misc/contributors.html">Contributors</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../language/index.html"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/core.html"><strong aria-hidden="true">2.1.</strong> Core</a></li><li class="chapter-item expanded "><a href="../language/seq.html" class="active"><strong aria-hidden="true">2.2.</strong> Sequences and arrays</a></li><li class="chapter-item expanded "><a href="../language/enums.html"><strong aria-hidden="true">2.3.</strong> Structs and enums</a></li><li class="chapter-item expanded "><a href="../language/errors.html"><strong aria-hidden="true">2.4.</strong> Error handling</a></li></ol></li><li class="chapter-item expanded "><a href="../std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/arithmetic.html"><strong aria-hidden="true">3.1.</strong> Arithmetic</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="../usage/verification.html"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="../usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="../developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../misc/contributors.html">Contributors</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -143,17 +143,39 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="verification"><a class="header" href="#verification">Verification</a></h1>
+                        <h1 id="sequences-and-arrays"><a class="header" href="#sequences-and-arrays">Sequences and arrays</a></h1>
+<h2 id="sequences"><a class="header" href="#sequences">Sequences</a></h2>
+<p>The staple <code>Vec</code> type is forbidden in hacspec. Instead, you have to use the
+type <code>Seq</code>, which is implemented as a wrapper around <code>Vec</code>.</p>
+<p>The most notable differences between <code>Seq</code> and <code>Vec</code> is that <code>Seq</code> is not
+resizable, and does not support <code>push</code> and <code>pop</code> operations. Instead, the
+final length of the seq has to be provided at creation time. See the
+hacspec standard library documentation for more details.</p>
+<p><code>Seq</code> is a built-in generic type that always has to be indexed by the content of the
+cells: <code>Seq&lt;u8&gt;</code>, etc.</p>
+<h2 id="arrays"><a class="header" href="#arrays">Arrays</a></h2>
+<p>The native Rust array types <code>[&lt;type of contents&gt;, &lt;size&gt;]</code> is forbidden in
+hacspec. Instead, you have to declare nominally at the top-level new array types
+for a specific cell content and size with:</p>
+<pre><code class="language-rust  noplaypen">array!(FooArray, u8, 64);
+// This declares type FooArray as an array of u8 of size 64
+bytes!(BarArray, 64);
+// bytes! is a specialized version of array! with secret bytes
+array!(BazArray, u8, 64, type_for_indexes:BazIndex);
+// The additional argument type_for_indexes defines an alias of usize
+// intended to spot which usizes are used to index BazArray (useful for
+// verification)
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                                                    <a rel="prev" href="../usage/specifications.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                                    <a rel="prev" href="../language/core.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
-                                                    <a rel="next" href="../usage/test_vectors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                                    <a rel="next" href="../language/enums.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -163,11 +185,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                                    <a rel="prev" href="../usage/specifications.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <a rel="prev" href="../language/core.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
-                                    <a rel="next" href="../usage/test_vectors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                    <a rel="next" href="../language/enums.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                             </nav>

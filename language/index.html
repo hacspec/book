@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../language/index.html" class="active"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/specification.html"><strong aria-hidden="true">2.1.</strong> Specification</a></li></ol></li><li class="chapter-item expanded "><a href="../std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="../usage/verification.html"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="../usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="../developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../misc/contributors.html">Contributors</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../language/index.html" class="active"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/core.html"><strong aria-hidden="true">2.1.</strong> Core</a></li><li class="chapter-item expanded "><a href="../language/seq.html"><strong aria-hidden="true">2.2.</strong> Sequences and arrays</a></li><li class="chapter-item expanded "><a href="../language/enums.html"><strong aria-hidden="true">2.3.</strong> Structs and enums</a></li><li class="chapter-item expanded "><a href="../language/errors.html"><strong aria-hidden="true">2.4.</strong> Error handling</a></li></ol></li><li class="chapter-item expanded "><a href="../std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/arithmetic.html"><strong aria-hidden="true">3.1.</strong> Arithmetic</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="../usage/verification.html"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="../usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="../developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../misc/contributors.html">Contributors</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -144,6 +144,19 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="the-hacspec-language"><a class="header" href="#the-hacspec-language">The hacspec language</a></h1>
+<p>This section gives an informal description of the hacspec language, whose
+goal is to provide hands-on documentation for users of the language. For
+a formal specification of the semantics of the language, please refer
+to the <a href="https://hal.inria.fr/hal-03176482">technical report</a>.</p>
+<p>hacspec is a domain-specific language embedded inside Rust. This means that
+all correct hacspec programs are correct Rust programs: you can use
+the usual Rust tooling for working on your hacspec developments. However,
+hacspec is a strict subset of Rust: this means that some features of Rust
+are forbidden inside hacspec. The goal of restricting the expressiveness of
+the language is twofold: first, help domain experts such as cryptographers
+convey their specifications in a fashion that should help them avoid
+mistakes; second, provide a way for Rust programmers to interact with theorem
+provers such as F* or Coq.</p>
 
                     </main>
 
@@ -153,7 +166,7 @@
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
-                                                    <a rel="next" href="../language/specification.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                                    <a rel="next" href="../language/core.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -167,7 +180,7 @@
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
-                                    <a rel="next" href="../language/specification.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                    <a rel="next" href="../language/core.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                             </nav>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Verification - hacspec</title>
+        <title>Structs and enums - hacspec</title>
                 
 
         <!-- Custom HTML head -->
@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../language/index.html"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/core.html"><strong aria-hidden="true">2.1.</strong> Core</a></li><li class="chapter-item expanded "><a href="../language/seq.html"><strong aria-hidden="true">2.2.</strong> Sequences and arrays</a></li><li class="chapter-item expanded "><a href="../language/enums.html"><strong aria-hidden="true">2.3.</strong> Structs and enums</a></li><li class="chapter-item expanded "><a href="../language/errors.html"><strong aria-hidden="true">2.4.</strong> Error handling</a></li></ol></li><li class="chapter-item expanded "><a href="../std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/arithmetic.html"><strong aria-hidden="true">3.1.</strong> Arithmetic</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="../usage/verification.html" class="active"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="../usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="../developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../misc/contributors.html">Contributors</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../language/index.html"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/core.html"><strong aria-hidden="true">2.1.</strong> Core</a></li><li class="chapter-item expanded "><a href="../language/seq.html"><strong aria-hidden="true">2.2.</strong> Sequences and arrays</a></li><li class="chapter-item expanded "><a href="../language/enums.html" class="active"><strong aria-hidden="true">2.3.</strong> Structs and enums</a></li><li class="chapter-item expanded "><a href="../language/errors.html"><strong aria-hidden="true">2.4.</strong> Error handling</a></li></ol></li><li class="chapter-item expanded "><a href="../std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/arithmetic.html"><strong aria-hidden="true">3.1.</strong> Arithmetic</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="../usage/verification.html"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="../usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="../developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../misc/contributors.html">Contributors</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -143,17 +143,62 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="verification"><a class="header" href="#verification">Verification</a></h1>
+                        <h1 id="structs-and-enums"><a class="header" href="#structs-and-enums">Structs and enums</a></h1>
+<p>hacspec also supports user-defined structs and enums with some restrictions.</p>
+<h2 id="structs"><a class="header" href="#structs">Structs</a></h2>
+<p>The only form of struct declaration currently allowed in hacspec is:</p>
+<pre><code class="language-rust  noplaypen">struct Foo(u32, Seq&lt;u32&gt;);
+</code></pre>
+<p>The struct thus declared can have one or more components. This form of struct
+declaration effectively corresponds to a single-case enum, and is implemented
+as such. Struct components can be accessed through let-binding destructuring:</p>
+<pre><code class="language-rust  noplaypen">let Foo(x, y) = z;
+</code></pre>
+<p>Note that you can't store borrowed types inside hacspec structs, hence there is no
+need for lifetime variables.</p>
+<h2 id="enums"><a class="header" href="#enums">Enums</a></h2>
+<p>hacspec supports very restricted <code>enum</code> declarations:</p>
+<pre><code class="language-rust  noplaypen">enum Foo {
+    CaseA,
+    CaseB(u16),
+    CaseC(Seq&lt;bool&gt;, u64)
+}
+</code></pre>
+<p>These declaration don't support the basic Rust features such as C-style
+union declarations with assignments for each case.</p>
+<p>Enumeration values can be pattern-matched in an expression:</p>
+<pre><code class="language-rust  noplaypen">match x {
+    Foo::CaseA =&gt; ...,
+    Foo::CaseB(y) =&gt; ...,
+    Foo::CaseC(y,z) =&gt; ...
+}
+</code></pre>
+<p>Note that you can't store borrowed types inside hacspec enums, hence there is no
+need for lifetime variables.</p>
+<h2 id="option-and-result"><a class="header" href="#option-and-result">Option and Result</a></h2>
+<p>User-defined structs and enums presented above don't support generic type
+parameters yet. However, the built-in enums <code>Option&lt;T&gt;</code> and <code>Result&lt;T,U&gt;</code>
+support type parameters. Those type parameters have to be explicitly declared
+each time, as hacspec does not currently support type inference:</p>
+<pre><code class="language-rust  noplaypen">match x {
+    Result::&lt;Seq&lt;u8&gt;, bool&gt;::Ok(y) =&gt; ...,
+    Result::&lt;Seq&lt;u8&gt;, bool&gt;::Err(err) =&gt; ...
+}
+</code></pre>
+<p>Such type parameter declaration is cumbersome; as a workaround we advise
+to declare a type alias as such:</p>
+<pre><code class="language-rust  noplaypen">type MyResult = Result::&lt;Seq&lt;u8&gt;, bool&gt;;
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                                                    <a rel="prev" href="../usage/specifications.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                                    <a rel="prev" href="../language/seq.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
-                                                    <a rel="next" href="../usage/test_vectors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                                    <a rel="next" href="../language/errors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -163,11 +208,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                                    <a rel="prev" href="../usage/specifications.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <a rel="prev" href="../language/seq.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
-                                    <a rel="next" href="../usage/test_vectors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                    <a rel="next" href="../language/errors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                             </nav>
