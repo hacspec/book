@@ -36,7 +36,7 @@ Note that recursive functions are forbidden in hacspec.
 hacspec supports all the Rust primitive types: integers (signed and unsigned),
 booleans, unit, tuples.
 
-Type aliases are allowed in Hacspec:
+Type aliases are allowed in hacspec:
 
 ```rust, noplaypen
 type FooAlias = u32;
