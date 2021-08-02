@@ -1,7 +1,7 @@
 # Arithmetic
 
 hacspec overloads the arithmetic operators for a wide variety of types
-corresponding to mathematical values mentioned in cryptographic specifications.
+corresponding to mathematical values used in cryptographic specifications.
 
 All of these types implement the `Numeric` trait defined by the hacspec standard
 library. The arithmetic operators work for all kinds of integers, but also
