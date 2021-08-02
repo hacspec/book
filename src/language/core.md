@@ -130,7 +130,7 @@ let x = if cond2 { ... } else { ... };
 ## Statements and expressions
 
 In regular Rust, statements and expressions can be mixed together freely.
-This not the case in hacspec, that imposes a strict precedence of statements
+This not the case in hacspec that imposes a strict precedence of statements
 over expressions. For instance, the following code is not allowed in
 hacspec:
 
