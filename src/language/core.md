@@ -10,7 +10,7 @@ start with:
 use hacspec_lib::*;
 
 // Optional: dependencies on other crates containing hacspec programs
-use foo_dep::*;
+use other_hacpsec_crate::*;
 ```
 
 No other form of `use` is allowed in hacspec, because allowing Rust's
@@ -23,7 +23,7 @@ hacspec is a functional language, and only supports the declaration of
 top-level functions:
 
 ```rust, noplaypen
-fn foo(x: bool) -> () {
+fn hacspec_function(x: bool) -> () {
     ...
 }
 ```
@@ -39,7 +39,7 @@ booleans, unit, tuples.
 Type aliases are allowed in hacspec:
 
 ```rust, noplaypen
-type FooAlias = u32;
+type OneTypeAlias = u32;
 ```
 
 ## Borrows
@@ -49,7 +49,7 @@ in hacspec, but only for function arguments. Indeed, you can declare a function
 argument as immutably borrowed:
 
 ```rust, noplaypen
-fn foo(arg: &Seq<u8>) {
+fn hacspec_function(arg: &Seq<u8>) {
     ...
 }
 ```
@@ -57,7 +57,7 @@ fn foo(arg: &Seq<u8>) {
 You can also immutably borrow a value at the call site of a function:
 
 ```rust, noplaypen
-foo(&Seq::<u8>::new(64))
+hacspec_function(&Seq::<u8>::new(64))
 ```
 
 In particular, return types cannot contain references, and the same is true
@@ -68,7 +68,7 @@ for types inside tuples or any data structure.
 hacspec allows the declaration of constants:
 
 ```rust, noplaypen
-const FOO_BAR : bool = false;
+const ONE_CONST : bool = false;
 ```
 
 ## Assignments
