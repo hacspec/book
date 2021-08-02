@@ -61,7 +61,7 @@ foo(&Seq::<u8>::new(64))
 ```
 
 In particular, return types cannot contain references, and the same is true
-for types inside tuples or any data structures.
+for types inside tuples or any data structure.
 
 ## Constants
 
