@@ -10,7 +10,7 @@ The only form of struct declaration currently allowed in hacspec is:
 struct Foo(u32, Seq<u32>);
 ```
 
-The struct thus declared can have one ore more components. This form of struct
+The struct thus declared can have one or more components. This form of struct
 declaration effectively corresponds to a single-case enum, and is implemented
 as such. Struct components can be accessed through let-binding destructuring:
 
