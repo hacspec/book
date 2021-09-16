@@ -61,5 +61,5 @@ coqc -R src/ Hacspec src/Lib.v
 or `make` to generate the `.vo` files used by `<output_file_name>.v`.
 
 For more information:
-- on QuickCheck (in rust): [BurntSushi/quickcheck](https://github.com/BurntSushi/quickcheck
+- on QuickCheck (in rust): [BurntSushi/quickcheck](https://github.com/BurntSushi/quickcheck)
 - on QuickChick: [Software foundations book on QuickChick](https://softwarefoundations.cis.upenn.edu/qc-current/index.html)
