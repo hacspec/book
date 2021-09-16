@@ -31,7 +31,9 @@ fn test_fp2_prop_add_neg(a: Fp2) -> bool {
 }
 ```
 which will run when you do `cargo test`. If you then add the tag `#[cfg(proof)]` and export to Coq,
-``` cargo hacspec <input_file_name>.rs -o <output_file_name>.v ```
+```
+cargo hacspec -o coq/src/<output_file_name>.v <input_crate_name>
+```
 then you get the QuickChick test,
 ```
 Definition test_fp2_prop_add_neg (a_320 : fp2) : bool :=
@@ -47,10 +49,16 @@ Instance show_fp : Show (fp) := Build_Show (fp) (fun x => show (GZnZ.val _ x)).
 Definition g_fp : G (fp) := @bindGen Z (fp) (arbitrary) (fun x => returnGen (@Z_in_nat_mod _ x)).
 Instance gen_fp : Gen (fp) := Build_Gen fp g_fp.
 ```
-which you can then run through coq by
+which you can then run through coq in the folder `coq/`
 ```
-coqc <output_file_name>.v
+coqc -R src/ Hacspec src/<output_file_name>.v
 ```
+Make sure you run:
+```
+coqc -R src/ Hacspec src/MachineIntegers.v
+coqc -R src/ Hacspec src/Lib.v
+```
+or `make` to generate the `.vo` files used by `<output_file_name>.v`.
 
 For more information:
 - on QuickCheck (in rust): [BurntSushi/quickcheck](https://github.com/BurntSushi/quickcheck
