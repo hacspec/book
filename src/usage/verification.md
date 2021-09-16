@@ -5,7 +5,7 @@
 ### QuickCheck / QuickChick
 
 You can test your hacspec code using quickcheck, simply implmenet Arbitrary for the type you want to generate tests for, e.g.
-```
+```rust,ignore
 impl Arbitrary for Fp {
     fn arbitrary(g: &mut Gen) -> Fp {
         let mut a: [u64; 6] = [0; 6];
@@ -22,7 +22,7 @@ impl Arbitrary for Fp {
 }
 ```
 then you can use the QuickCheck attribute, to make QuickCheck do property based testing for this function,
-```
+```rust,ignore
 #[cfg(test)]
 #[quickcheck] //Using the fp arbitraty implementation from above to generate fp2 elements.
 fn test_fp2_prop_add_neg(a: Fp2) -> bool {
@@ -53,5 +53,5 @@ coqc <output_file_name>.v
 ```
 
 For more information:
-- on QuickCheck (in rust): (BurntSushi/quickcheck)[https://github.com/BurntSushi/quickcheck]
-- on QuickChick: (Software foundations book on QuickChick)[https://softwarefoundations.cis.upenn.edu/qc-current/index.html]
+- on QuickCheck (in rust): [BurntSushi/quickcheck](https://github.com/BurntSushi/quickcheck
+- on QuickChick: [Software foundations book on QuickChick](https://softwarefoundations.cis.upenn.edu/qc-current/index.html)
