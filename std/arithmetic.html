@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>For Developers - hacspec</title>
+        <title>Arithmetic - hacspec</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../language/index.html"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/core.html"><strong aria-hidden="true">2.1.</strong> Core</a></li><li class="chapter-item expanded "><a href="../language/seq.html"><strong aria-hidden="true">2.2.</strong> Sequences and arrays</a></li><li class="chapter-item expanded "><a href="../language/enums.html"><strong aria-hidden="true">2.3.</strong> Structs and enums</a></li><li class="chapter-item expanded "><a href="../language/errors.html"><strong aria-hidden="true">2.4.</strong> Error handling</a></li></ol></li><li class="chapter-item expanded "><a href="../std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../std/arithmetic.html"><strong aria-hidden="true">3.1.</strong> Arithmetic</a></li><li class="chapter-item expanded "><a href="../std/seq.html"><strong aria-hidden="true">3.2.</strong> Sequence and array operations</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="../usage/verification.html"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="../usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="../developers/index.html" class="active"><strong aria-hidden="true">6.</strong> For Developers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../developers/compiler.html"><strong aria-hidden="true">6.1.</strong> Working on the compiler</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../misc/contributors.html">Contributors</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../language/index.html"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../language/core.html"><strong aria-hidden="true">2.1.</strong> Core</a></li><li class="chapter-item expanded "><a href="../language/seq.html"><strong aria-hidden="true">2.2.</strong> Sequences and arrays</a></li><li class="chapter-item expanded "><a href="../language/enums.html"><strong aria-hidden="true">2.3.</strong> Structs and enums</a></li><li class="chapter-item expanded "><a href="../language/errors.html"><strong aria-hidden="true">2.4.</strong> Error handling</a></li></ol></li><li class="chapter-item expanded "><a href="../std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../std/arithmetic.html" class="active"><strong aria-hidden="true">3.1.</strong> Arithmetic</a></li><li class="chapter-item expanded "><a href="../std/seq.html"><strong aria-hidden="true">3.2.</strong> Sequence and array operations</a></li></ol></li><li class="chapter-item expanded "><a href="../examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="../usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="../usage/verification.html"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="../usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="../developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../developers/compiler.html"><strong aria-hidden="true">6.1.</strong> Working on the compiler</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../misc/contributors.html">Contributors</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,18 +134,72 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="for-developers"><a class="header" href="#for-developers">For Developers</a></h1>
-<p>This section contains a handy guide for hacspec developers working on the
-standard library or the compiler.</p>
+                        <h1 id="arithmetic"><a class="header" href="#arithmetic">Arithmetic</a></h1>
+<p>hacspec overloads the arithmetic operators for a wide variety of types
+corresponding to mathematical values mentioned in cryptographic specifications.</p>
+<h2 id="the-numeric-trait"><a class="header" href="#the-numeric-trait">The <code>Numeric</code> trait</a></h2>
+<p>All of these types implement the <code>Numeric</code> trait defined by the hacspec standard
+library. The arithmetic operators work for all kinds of integers, but also
+arrays and sequences (point-wise operations).</p>
+<p>Note that the list of types implementing <code>Numeric</code> is hardcoded in the
+hacspec compiler, and as of this day cannot be extended by the user.</p>
+<p>While the Rust compiler can infer the type of integer literals automatically,
+this feature is not implemented by the hacspec compiler:</p>
+<pre><code>let w: u32 = 0; // ERROR: an integer without a suffix will have type usize
+let x: u64 = 0x64265u64; // GOOD
+let y: u64 = 4u64; // GOOD
+</code></pre>
+<h2 id="public-and-secret-integers"><a class="header" href="#public-and-secret-integers">Public and secret integers</a></h2>
+<p>One of hacspec's goal is to enable users quickly check whether their
+application does not obviously break the constant-time guarantee.
+Certain processor instructions take more or less time to complete depending
+on their inputs, which can cause secret leakage and break the security of
+an application. Hence, hacspec offers for each type of integer (<code>u8</code>, <code>u32</code>, etc.)
+a mirror secret integer type (<code>U8</code>, <code>U32</code>, etc.) for which operations
+that break constant-timedness are forbidden.</p>
+<p>This public/private distinction can be found at a lot of places in the standard
+library, and is made to forbid functions and data structures from leaking secrets.</p>
+<p>Conversions between public and secret integers are restricted to two functions:
+<code>classify</code> and <code>declassify</code>.</p>
+<h2 id="abstract-integers"><a class="header" href="#abstract-integers">Abstract integers</a></h2>
+<p>Some cryptographic specifications talk about modular arithmetic in large
+fields, whose size overflows even <code>u128</code>. To ease the expression of such
+specifications, hacspec offers wrapper types around <code>BigInt</code> that can be
+declared using the following API:</p>
+<pre><code class="language-rust  noplaypen">abstract_nat_mod!(
+    NameOfModularInts,
+    NameOfUnderlyingByteRepresentation,
+    256, // Number of bits for the representation of the big integer,
+    &quot;ffffffffffffffff00000000000065442&quot;, // Hex representation of the modulo value as hex
+)
+
+abstract_public_nat_mod!(
+    ... // Public version of above
+)
+</code></pre>
+<h2 id="integers-as-bytes"><a class="header" href="#integers-as-bytes">Integers as bytes</a></h2>
+<p>It is often useful to view an integer as a sequence of bytes that can be
+manipulated individually. The hacspec standard library provides a number
+of function to translate back and forth from integer to sequence of bytes:</p>
+<pre><code class="language-rust  noplaypen">pub fn u16_to_le_bytes(x: u16) -&gt; u16Word;
+
+pub fn u16_from_le_bytes(s: u16Word) -&gt; u16;
+
+pub fn U64_to_be_bytes(x: U64) -&gt; U64Word;
+
+pub fn U64_from_be_bytes(s: U64Word) -&gt; U64;
+
+...
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../usage/test_vectors.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../std/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../developers/compiler.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../std/seq.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -154,10 +208,10 @@ standard library or the compiler.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../usage/test_vectors.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../std/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../developers/compiler.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../std/seq.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
