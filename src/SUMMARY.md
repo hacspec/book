@@ -2,6 +2,7 @@
 
 - [Introduction](./readme.md)
 - [The hacspec language](./language/readme.md)
+    - [Syntax](./language/syntax.md)
     - [Core](./language/core.md)
     - [Sequences and arrays](./language/seq.md)
     - [Structs and enums](./language/enums.md)
