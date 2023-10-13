@@ -23,7 +23,7 @@ let y: u64 = 4u64; // GOOD
 
 ## Public and secret integers
 
-One of hacspec's goal is to enable users quickly check whether their
+One of hacspec's goal is to enable users to quickly check whether their
 application does not obviously break the constant-time guarantee.
 Certain processor instructions take more or less time to complete depending
 on their inputs, which can cause secret leakage and break the security of

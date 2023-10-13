@@ -1,13 +1,10 @@
 # Sequence and array operations
 
-While the types for [sequence and arrays](/language/seq.md) has been introduced
-earlier,
-
 ## Operations common to sequences and arrays
 
 ### Base traits
 
-Some operations are common to both [sequences and arrays](/language/seq.md)
+Some operations are common to both [sequences and arrays](/book/language/seq.md)
 by design, and can be used as the interoperability base between the two types
 of collections. These operations are the following:
 * `len`: gives the length of an array or sequence;
@@ -46,7 +43,7 @@ data under the hood.
 
 ### Ownage
 
-Some mehtods have two versions: an `owned` and a non-`owned` version, depending
+Some methods have two versions: an `owned` and a non-`owned` version, depending
 on whether the `self` argument is consumed or not by the method. This distinction
 is useful to avoid unnecessary copies and thus be more performant.
 

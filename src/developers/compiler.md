@@ -5,7 +5,7 @@
 ![Hacspec compiler architecture](hacspec_architecture.png)
 
 The Rustspec compiler intervenes after the regular Rust typechecking,
-and takes the Rust AST to translate it into a stricter hacspec AST,
+by translating the Rust AST into a stricter hacspec AST,
 yielding error messages if you're not in the subset.
 
 The hacspec AST then undergoes a typechecking phase that replicates the
@@ -34,7 +34,7 @@ building the AST.
 ### Translation from Rust AST
 
 This phase is contained in `ast_to_rustspec.rs`. The trickyness of this
-translation is that it needs o be aware of certain special names contained
+translation is that it needs to be aware of certain special names contained
 in the structure `SpecialNames`. Indeed, while the Rust AST treats the application
 enum constructors like function applications, the hacspec AST considers them as
 proper injection so we need to distinguish them in the Rust AST. For that, we
@@ -65,7 +65,7 @@ and global variables from each other.
 
 ### External data
 
-A hacspec file can never almost never be considered alone, as it usually imports
+A hacspec file can never (in principal) be considered alone, as it usually imports
 at least several other crates like the hacspec standard library. These external
 crates must pre-populate the typechecking context with the types and function
 signatures that they define.
@@ -144,7 +144,7 @@ assistant libraries.
 
 ## Unit tests
 
-The compiler has various unit tests that are control trough the `language/tests`
+The compiler has various unit tests that are controlled trough the `language/tests`
 files. Please enrich the unit tests bases in `language-tests`,
 `negative-language-tests` and `test-crate` as you implement new features for
 the compiler. The compiler can also be tested against all the hacspec cryptographic
