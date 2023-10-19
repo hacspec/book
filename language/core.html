@@ -1,14 +1,16 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Core - hacspec</title>
+
+
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
@@ -16,27 +18,31 @@
         <link rel="stylesheet" href="../css/general.css">
         <link rel="stylesheet" href="../css/chrome.css">
         <link rel="stylesheet" href="../css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="../fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="../highlight.css">
         <link rel="stylesheet" href="../tomorrow-night.css">
         <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
         <!-- MathJax -->
-        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -52,27 +58,34 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
@@ -82,20 +95,42 @@
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -112,6 +147,7 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -125,8 +161,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -144,8 +181,7 @@ start with:</p>
 <pre><code class="language-rust  noplaypen">use hacspec_lib::*;
 
 // Optional: dependencies on other crates containing hacspec programs
-use other_hacpsec_crate::*;
-</code></pre>
+use other_hacpsec_crate::*;</code></pre>
 <p>No other form of <code>use</code> is allowed in hacspec, because allowing Rust's
 complex import patterns would increase the complexity of the hacspec compiler
 and conflict with the module systems of most proof assistants.</p>
@@ -154,8 +190,7 @@ and conflict with the module systems of most proof assistants.</p>
 top-level functions:</p>
 <pre><code class="language-rust  noplaypen">fn hacspec_function(x: bool) -&gt; () {
     ...
-}
-</code></pre>
+}</code></pre>
 <p>The functions can take any number of arguments, and may return a value (or not).
 Note that recursive functions are forbidden in hacspec.</p>
 <p>The control flow inside hacspec functions is limited, as <code>return</code> statements
@@ -166,49 +201,41 @@ booleans, unit, tuples. hacspec possesses some support for generic
 types, but only for primitive types defined by the language creators, and
 not for user-defined types.</p>
 <p>Type aliases are allowed in hacspec:</p>
-<pre><code class="language-rust  noplaypen">type OneTypeAlias = u32;
-</code></pre>
+<pre><code class="language-rust  noplaypen">type OneTypeAlias = u32;</code></pre>
 <h2 id="borrows"><a class="header" href="#borrows">Borrows</a></h2>
 <p>hacspec forbids mutable borrows in all places. Immutable borrows are allowed
 in hacspec, but only for function arguments. Indeed, you can declare a function
 argument as immutably borrowed:</p>
 <pre><code class="language-rust  noplaypen">fn hacspec_function(arg: &amp;Seq&lt;u8&gt;) {
     ...
-}
-</code></pre>
+}</code></pre>
 <p>You can also immutably borrow a value at the call site of a function:</p>
-<pre><code class="language-rust  noplaypen">hacspec_function(&amp;Seq::&lt;u8&gt;::new(64))
-</code></pre>
+<pre><code class="language-rust  noplaypen">hacspec_function(&amp;Seq::&lt;u8&gt;::new(64))</code></pre>
 <p>In particular, return types cannot contain references, and the same is true
 for types inside tuples or any data structure.</p>
 <h2 id="constants"><a class="header" href="#constants">Constants</a></h2>
 <p>hacspec allows the declaration of constants:</p>
-<pre><code class="language-rust  noplaypen">const ONE_CONST : bool = false;
-</code></pre>
+<pre><code class="language-rust  noplaypen">const ONE_CONST : bool = false;</code></pre>
 <h2 id="assignments"><a class="header" href="#assignments">Assignments</a></h2>
 <p>Inside a function body, hacspec allows regular Rust let-bindings:</p>
-<pre><code class="language-rust  noplaypen">let x = ...;
-</code></pre>
+<pre><code class="language-rust  noplaypen">let x = ...;</code></pre>
 <p>hacspec also allows mutable let bindings, and subsequent reassignments:</p>
 <pre><code class="language-rust  noplaypen">let mut x = ...;
 ...
-x = ...;
-</code></pre>
+x = ...;</code></pre>
 <p>This allowing of mutable variable might come as a contradiction to hacspec's
 philosophy of forbidding mutable state. But in fact, mutable local variables in
 hacspec can be translated to a completely side-effect free form with a state-passing
 like monadic structure.</p>
 <p>Left-hand sides of assignments support destructuring, which is currently the
 only way to access the members of a tuple:</p>
-<pre><code class="language-rust  noplaypen">let (x, y) = z;
-</code></pre>
+<pre><code class="language-rust  noplaypen">let (x, y) = z;</code></pre>
 <h2 id="loops"><a class="header" href="#loops">Loops</a></h2>
 <p>Looping is severely restricted in hacspec compared to Rust, as the only accepted form is
 <code>for</code> looping with a counter over an integer range:</p>
 <pre><code class="language-rust  noplaypen">for i in low..hi {
     ... // The block can use i and reassign mutable variables
-}
-</code></pre>
+}</code></pre>
 <p>The motivation for this restriction is to ease the proof of termination of
 loops. <code>break</code> or <code>continue</code> statements are forbidden.</p>
 <h2 id="conditionals"><a class="header" href="#conditionals">Conditionals</a></h2>
@@ -219,8 +246,7 @@ conditionals:</p>
 } else { // else block is optional here
     ...
 }
-let x = if cond2 { ... } else { ... };
-</code></pre>
+let x = if cond2 { ... } else { ... };</code></pre>
 <h2 id="statements-and-expressions"><a class="header" href="#statements-and-expressions">Statements and expressions</a></h2>
 <p>In regular Rust, statements and expressions can be mixed together freely.
 This not the case in hacspec that imposes a strict precedence of statements
@@ -232,8 +258,7 @@ hacspec:</p>
     3
 } else {
     4
-};
-</code></pre>
+};</code></pre>
 <h2 id="visibility"><a class="header" href="#visibility">Visibility</a></h2>
 <p>hacspec allows for both <code>pub</code> and non-<code>pub</code> versions of item declarations
 (pub, non-pub, etc). You simply have to respect the Rust visibility rules. Note
@@ -247,9 +272,11 @@ backends.</p>
                             <a rel="prev" href="../language/syntax.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../language/seq.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+
+                            <a rel="next prefetch" href="../language/seq.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
@@ -259,23 +286,33 @@ backends.</p>
                     <a rel="prev" href="../language/syntax.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../language/seq.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+
+                    <a rel="next prefetch" href="../language/seq.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
+
+
+    </div>
     </body>
 </html>
