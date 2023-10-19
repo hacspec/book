@@ -4,7 +4,7 @@
 
 ### QuickCheck / QuickChick
 
-You can test your hacspec code using quickcheck, simply implmenet Arbitrary for the type you want to generate tests for, e.g.
+You can test your hacspec code using [QuickCheck](https://github.com/BurntSushi/quickcheck) (a Rust library for randomized property-based testing), by simply implementing `quickcheck::Arbitrary` for the type you want to generate tests for. For example:
 ```rust,ignore
 impl Arbitrary for Fp {
     fn arbitrary(g: &mut Gen) -> Fp {
@@ -21,7 +21,7 @@ impl Arbitrary for Fp {
     }
 }
 ```
-then you can use the QuickCheck attribute, to make QuickCheck do property based testing for this function,
+then you can use the `quickcheck` attribute, to make QuickCheck do property based testing for this function:
 ```rust,ignore
 #[cfg(test)]
 #[quickcheck] //Using the fp arbitraty implementation from above to generate fp2 elements.
@@ -34,7 +34,7 @@ which will run when you do `cargo test`. If you then add the tag `#[cfg(proof)]`
 ```
 cargo hacspec -o coq/src/<output_file_name>.v <input_crate_name>
 ```
-then you get the QuickChick test,
+then you get corresponding [QuickChick](https://github.com/QuickChick/QuickChick) test,
 ```
 Definition test_fp2_prop_add_neg (a_320 : fp2) : bool :=
   let b_321 :=
