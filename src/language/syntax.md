@@ -2,7 +2,7 @@
 
 ```
 P ::= [i]\*                     Program items
-i ::= array!(t, μ, n)           Array type declaration where n is a natural number
+i ::= array!(t, n, μ)           Array type declaration where n is a natural number
     | nat_mod!(t, n)            Modular integer
     | fn f([d]+) -> μ b         Function declaration
     | type t = enum { [c(μ)]+ } Enum declaration (with constructors)

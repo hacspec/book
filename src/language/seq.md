@@ -20,11 +20,11 @@ hacspec. Instead, you have to declare nominally at the top-level new array types
 for a specific cell content and size with:
 
 ```rust, noplaypen
-array!(FooArray, u8, 64);
+array!(FooArray, 64, u8);
 // This declares type FooArray as an array of u8 of size 64
 bytes!(BarArray, 64);
 // bytes! is a specialized version of array! with secret bytes
-array!(BazArray, u8, 64, type_for_indexes:BazIndex);
+array!(BazArray, 64, u8, type_for_indexes:BazIndex);
 // The additional argument type_for_indexes defines an alias of usize
 // intended to spot which usizes are used to index BazArray (useful for
 // verification)
