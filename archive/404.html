@@ -3,8 +3,8 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>hax</title>
-        <meta name="robots" content="noindex">
+        <title>Page not found - hacspec</title>
+        <base href="/">
 
 
         <!-- Custom HTML head -->
@@ -91,7 +91,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Examples</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Tutorial</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Proofs</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">4.1.</strong> F*</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.2.</strong> Coq</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.3.</strong> libcore</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Contributing</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">5.1.</strong> Structure</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> Hax Cargo subcommand</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.3.</strong> Frontend: the Rustc driver</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.4.</strong> Frontend: the exporter</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.5.</strong> Engine</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.6.</strong> Backends</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.7.</strong> Utilities</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.8.</strong> Libraries & Macros</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.9.</strong> libcore</div></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><div>Contributors</div></li><li class="chapter-item expanded affix "><a href="misc/archive.html">Archive</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="language/index.html"><strong aria-hidden="true">2.</strong> The hacspec language</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="language/syntax.html"><strong aria-hidden="true">2.1.</strong> Syntax</a></li><li class="chapter-item expanded "><a href="language/core.html"><strong aria-hidden="true">2.2.</strong> Core</a></li><li class="chapter-item expanded "><a href="language/seq.html"><strong aria-hidden="true">2.3.</strong> Sequences and arrays</a></li><li class="chapter-item expanded "><a href="language/enums.html"><strong aria-hidden="true">2.4.</strong> Structs and enums</a></li><li class="chapter-item expanded "><a href="language/errors.html"><strong aria-hidden="true">2.5.</strong> Error handling</a></li></ol></li><li class="chapter-item expanded "><a href="std/index.html"><strong aria-hidden="true">3.</strong> The hacspec std library</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="std/arithmetic.html"><strong aria-hidden="true">3.1.</strong> Arithmetic</a></li><li class="chapter-item expanded "><a href="std/seq.html"><strong aria-hidden="true">3.2.</strong> Sequence and array operations</a></li></ol></li><li class="chapter-item expanded "><a href="examples/index.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li class="chapter-item expanded "><a href="usage/index.html"><strong aria-hidden="true">5.</strong> Usage</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="usage/specifications.html"><strong aria-hidden="true">5.1.</strong> Specifications</a></li><li class="chapter-item expanded "><a href="usage/verification.html"><strong aria-hidden="true">5.2.</strong> Verification</a></li><li class="chapter-item expanded "><a href="usage/test_vectors.html"><strong aria-hidden="true">5.3.</strong> Test Vectors</a></li></ol></li><li class="chapter-item expanded "><a href="developers/index.html"><strong aria-hidden="true">6.</strong> For Developers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="developers/compiler.html"><strong aria-hidden="true">6.1.</strong> Working on the compiler</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="misc/contributors.html">Contributors</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,7 +142,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">hax</h1>
+                    <h1 class="menu-title">hacspec</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -174,26 +174,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>hax is a tool for high assurance translations that translates a large subset of
-Rust into formal languages such as <a href="https://www.fstar-lang.org/">F*</a> or <a href="https://coq.inria.fr/">Coq</a>.
-This extends the scope of the hacspec project, which was previously a DSL embedded in Rust,
-to a usable tool for verifying Rust programs.</p>
-<blockquote>
-<p>So what is <strong>hacspec</strong> now?</p>
-</blockquote>
-<p>hacspec is the functional subset of Rust that can be used, together with a hacspec
-standard library, to write succinct, executable, and verifiable specifications in
-Rust.
-These specifications can be translated into formal languages with hax.</p>
-<h1 id="-warning-this-book-is-currently-being-rewritten-"><a class="header" href="#-warning-this-book-is-currently-being-rewritten-">⚠️ Warning: this book is currently being rewritten! ⚠️</a></h1>
-<p>hax is the successor of hacspec. You can find the previous book
-describing hacspec <a href="/archive">here</a>, but keep in mind most of the information
-there is outdated.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="warning-this-book-is-currently-being-rewritten"><a class="header" href="#warning-this-book-is-currently-being-rewritten">Warning: this book is currently being rewritten!</a></h1>
-<p>hax is the successor of hacspec. You can find the previous book
-describing hacspec <a href="misc/../archive/index.html">here</a>, but keep in mind most of the information
-there is outdated.</p>
+                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
+<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
 
                     </main>
 
@@ -230,13 +212,6 @@ there is outdated.</p>
 
         <!-- Custom JS scripts -->
 
-        <script>
-        window.addEventListener('load', function() {
-            MathJax.Hub.Register.StartupHook('End', function() {
-                window.setTimeout(window.print, 100);
-            });
-        });
-        </script>
 
     </div>
     </body>
