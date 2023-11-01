@@ -3,7 +3,7 @@ authors = ["Franziskus Kiefer"]
 language = "en"
 multilingual = false
 src = "src"
-title = "hacspec"
+title = "hax"
 
 [output.html]
 mathjax-support = true

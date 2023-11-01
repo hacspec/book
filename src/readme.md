@@ -5,14 +5,14 @@ Rust into formal languages such as [F\*](https://www.fstar-lang.org/) or [Coq](h
 This extends the scope of the hacspec project, which was previously a DSL embedded in Rust,
 to a usable tool for verifying Rust programs.
 
-> So what is hacspec now?
+> So what is **hacspec** now?
 
 hacspec is the functional subset of Rust that can be used, together with a hacspec
 standard library, to write succinct, executable, and verifiable specifications in
 Rust.
 These specifications can be translated into formal languages with hax.
 
-# Warning: this book is currently being rewritten!
+# ⚠️ Warning: this book is currently being rewritten! ⚠️ 
 
 hax is the successor of hacspec. You can find the previous book
 describing hacspec [here](/archive), but keep in mind most of the information
