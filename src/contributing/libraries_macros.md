@@ -21,5 +21,5 @@ macros](https://doc.rust-lang.org/beta/reference/procedural-macros.html)
 that defines nice and simple-to-use macros. Those macro take care of
 cooking some `hax_lib_macros_types::AttrPayload` payload(s), then
 serialize those payloads to JSON and produce one or more
-`#[_hax::json(serialized_pyaload)]` attributes.
+`#[_hax::json(serialized_payload)]` attributes.
 
