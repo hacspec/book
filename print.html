@@ -91,7 +91,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Examples</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Tutorial</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Proofs</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">4.1.</strong> F*</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.2.</strong> Coq</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.3.</strong> libcore</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Contributing</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">5.1.</strong> Structure</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> Hax Cargo subcommand</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.3.</strong> Frontend: the Rustc driver</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.4.</strong> Frontend: the exporter</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.5.</strong> Engine</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.6.</strong> Backends</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.7.</strong> Utilities</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.8.</strong> Libraries & Macros</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.9.</strong> libcore</div></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><div>Contributors</div></li><li class="chapter-item expanded affix "><a href="misc/archive.html">Archive</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Examples</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Tutorial</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Proofs</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">4.1.</strong> F*</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.2.</strong> Coq</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.3.</strong> libcore</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Contributing</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">5.1.</strong> Structure</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> Hax Cargo subcommand</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.3.</strong> Frontend: the Rustc driver</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.4.</strong> Frontend: the exporter</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.5.</strong> Engine</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.6.</strong> Backends</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.7.</strong> Utilities</div></li><li class="chapter-item expanded "><a href="contributing/libraries_macros.html"><strong aria-hidden="true">5.8.</strong> Libraries & Macros</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.9.</strong> libcore</div></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><div>Contributors</div></li><li class="chapter-item expanded affix "><a href="misc/archive.html">Archive</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -190,6 +190,26 @@ These specifications can be translated into formal languages with hax.</p>
 <p>hax is the successor of hacspec. You can find the previous book
 describing hacspec <a href="/archive">here</a>, but keep in mind most of the information
 there is outdated.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="libraries"><a class="header" href="#libraries">Libraries</a></h1>
+<h1 id="macros-and-attributes"><a class="header" href="#macros-and-attributes">Macros and attributes</a></h1>
+<p>The hax engine understands only one attribute: <code>#[_hax::json(PAYLOAD)]</code>,
+where <code>PAYLOAD</code> is a JSON serialization of the Rust enum
+<code>hax_lib_macros_types::AttrPayload</code>.</p>
+<p>Note <code>#[_hax::json(PAYLOAD)]</code> is a <a href="https://github.com/rust-lang/rust/issues/66079">tool
+attribute</a>: an
+attribute that is never expanded.</p>
+<p>In the engine, the OCaml module <code>Attr_payloads</code> offers an API to query
+attributes easily. The types in crate <code>hax_lib_macros_types</code> and
+corresponding serializers/deserializers are automatically generated in
+OCaml, thus there is no manual parsing involved.</p>
+<h2 id="user-experience"><a class="header" href="#user-experience">User experience</a></h2>
+<p>Asking the user to type <code>#[_hax::json(some_long_json)]</code> is not very
+friendly. Thus, the crate <code>hax-lib-macros</code> defines a bunch of <a href="https://doc.rust-lang.org/beta/reference/procedural-macros.html">proc
+macros</a>
+that defines nice and simple-to-use macros. Those macro take care of
+cooking some <code>hax_lib_macros_types::AttrPayload</code> payload(s), then
+serialize those payloads to JSON and produce one or more
+<code>#[_hax::json(serialized_payload)]</code> attributes.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="warning-this-book-is-currently-being-rewritten"><a class="header" href="#warning-this-book-is-currently-being-rewritten">Warning: this book is currently being rewritten!</a></h1>
 <p>hax is the successor of hacspec. You can find the previous book
 describing hacspec <a href="misc/../archive/index.html">here</a>, but keep in mind most of the information
