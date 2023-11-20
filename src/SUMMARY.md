@@ -15,7 +15,7 @@
     - [Engine]()
     - [Backends]()
     - [Utilities]()
-    - [Libraries & Macros]()
+    - [Libraries & Macros](contributing/libraries_macros.md)
     - [`libcore`]()
 
 ---
