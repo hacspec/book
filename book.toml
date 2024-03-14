@@ -7,3 +7,4 @@ title = "hax"
 
 [output.html]
 mathjax-support = true
+
