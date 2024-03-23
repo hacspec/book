@@ -91,9 +91,11 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Examples</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Tutorial</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Proofs</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">4.1.</strong> F*</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.2.</strong> Coq</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.3.</strong> libcore</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Contributing</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">5.1.</strong> Structure</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> Hax Cargo subcommand</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.3.</strong> Frontend: the Rustc driver</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.4.</strong> Frontend: the exporter</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.5.</strong> Engine</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.6.</strong> Backends</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.7.</strong> Utilities</div></li><li class="chapter-item expanded "><a href="contributing/libraries_macros.html"><strong aria-hidden="true">5.8.</strong> Libraries & Macros</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.9.</strong> libcore</div></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><div>Contributors</div></li><li class="chapter-item expanded affix "><a href="misc/archive.html">Archive</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Examples</div></li><li class="chapter-item expanded "><a href="quick_start/intro.html"><strong aria-hidden="true">3.</strong> Quick start</a></li><li class="chapter-item expanded "><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/panic-freedom.html"><strong aria-hidden="true">4.1.</strong> Panic freedom</a></li><li class="chapter-item expanded "><a href="tutorial/properties.html"><strong aria-hidden="true">4.2.</strong> Properties on functions</a></li><li class="chapter-item expanded "><a href="tutorial/data-invariants.html"><strong aria-hidden="true">4.3.</strong> Data invariants</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Proofs</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">5.1.</strong> F*</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> Coq</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.3.</strong> libcore</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Contributing</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">6.1.</strong> Structure</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.2.</strong> Hax Cargo subcommand</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.3.</strong> Frontend: the Rustc driver</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.4.</strong> Frontend: the exporter</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.5.</strong> Engine</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.6.</strong> Backends</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.7.</strong> Utilities</div></li><li class="chapter-item expanded "><a href="contributing/libraries_macros.html"><strong aria-hidden="true">6.8.</strong> Libraries & Macros</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.9.</strong> libcore</div></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><div>Contributors</div></li><li class="chapter-item expanded affix "><a href="misc/archive.html">Archive</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -190,6 +192,413 @@ These specifications can be translated into formal languages with hax.</p>
 <p>hax is the successor of hacspec. You can find the previous book
 describing hacspec <a href="/archive">here</a>, but keep in mind most of the information
 there is outdated.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start-with-hax-and-f"><a class="header" href="#quick-start-with-hax-and-f">Quick start with hax and F*</a></h1>
+<p>You want to try hax out on a Rust crate of yours? This chapter is what you are looking for!</p>
+<h2 id="setup-the-tools"><a class="header" href="#setup-the-tools">Setup the tools</a></h2>
+<ul>
+<li><strong>user-checkable</strong> <a href="https://github.com/hacspec/hax?tab=readme-ov-file#installation">Install the hax toolchain</a>.<br />
+<span style="margin-right:30px;"></span>🪄 Running <code>cargo hax --version</code> should print some version info.</li>
+<li><strong>user-checkable</strong> <a href="https://github.com/FStarLang/FStar/blob/master/INSTALL.md">Install F*</a></li>
+</ul>
+<h2 id="setup-the-crate-you-want-to-verify"><a class="header" href="#setup-the-crate-you-want-to-verify">Setup the crate you want to verify</a></h2>
+<p><em>Note: the instructions below assume you are in the folder of the specifc crate (<strong>not workspace!</strong>) you want to extract.</em></p>
+<ul>
+<li><strong>user-checkable</strong> Create the folder <code>proofs/fstar/extraction</code> folder, right next to the <code>Cargo.toml</code> of the crate you want to verify.<br />
+<span style="margin-right:30px;"></span>🪄 <code>mkdir -p proofs/fstar/extraction</code></li>
+<li><strong>user-checkable</strong> Copy <a href="https://gist.github.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3">this makefile</a> to <code>proofs/fstar/extraction/Makefile</code>.<br />
+<span style="margin-right:30px;"></span>🪄 <code>curl -O proofs/fstar/extraction/Makefile https://gist.githubusercontent.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3/raw/64fd922820b64d90f4d26eaf70ed02e694c30719/Makefile</code></li>
+<li><strong>user-checkable</strong> Add <code>hax-lib</code> and <code>hax-lib-macros</code> as dependencies to your crate.<br />
+<span style="margin-right:30px;"></span>🪄 <code>cargo add --git https://github.com/hacspec/hax hax-lib hax-lib-macros</code></li>
+</ul>
+<h2 id="extract-the-functions-you-are-interested-in"><a class="header" href="#extract-the-functions-you-are-interested-in">Extract the functions you are interested in</a></h2>
+<p><em>Note: the instructions below assume you are in the folder of the
+specific crate you want to extract.</em></p>
+<p>Run the command <code>cargo hax into fstar</code> to extract every item of your
+crate as F* modules in the subfolder <code>proofs/fstar/extraction</code>.</p>
+<p>Probably, your Rust crate contains mixed kinds of code: some is
+critical (e.g. the library functions at the core of your crate) while
+some other is not (e.g. the binary driver that wrap the library). In
+this case, you likely want to extract only partially your crate, so
+that you can focus on the important part.</p>
+<p>If you want to extract a function
+<code>your_crate::some_module::my_function</code>, you need to tell <code>hax</code> to
+extract nothing but <code>my_function</code>:
+<code>cargo hax into -i '-** +your_crate::some_module::my_function' fstar</code>.
+Note this command will extract <code>my_function</code> but also any item
+(function, type, etc.) from your crate which is used directly or
+indirectly by <code>my_function</code>.</p>
+<h2 id="start-f-verification"><a class="header" href="#start-f-verification">Start F* verification</a></h2>
+<p>After running the hax toolchain on your Rust code, you will end up
+with various F* modules in the <code>proofs/fstar/extraction</code> folder. The
+<code>Makefile</code> in <code>proofs/fstar/extraction</code> will run F*.</p>
+<ol>
+<li><strong>Lax check:</strong> the first step is to run <code>OTHERFLAGS="--lax" make</code>,
+which will run F* in "lax" mode. The lax mode just make sure basic
+typechecking works: it is not proving anything. This first step is
+important because there might be missing libraries. If F* is not
+able to find a defintion, it is probably a <code>libcore</code> issue: you
+probably need to edit the F* library, which lives in the
+<code>proofs-libs</code> directory in the root of the hax repo.</li>
+<li><strong>Typecheck:</strong> the second step is to run <code>make</code>. This will ask F*
+to typecheck fully your crate. This is very likely that you need to
+add preconditions and postconditions at this stage. Indeed, this
+second step is about panic freedom: if F* can typecheck your crate,
+it means your code <em>never</em> panics, which already is an important
+property.</li>
+</ol>
+<p>To go further, please read the next chapter.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tutorial"><a class="header" href="#tutorial">Tutorial</a></h1>
+<p>This tutorial is a guide for formally verifying properties about Rust
+programs using the hax toolchain. hax is a tool that translates Rust
+programs to various formal programming languages.</p>
+<p>The formal programming languages we target are called <em>backends</em>. Some
+of them, e.g. <a href="https://fstar-lang.org/">F*</a> or
+<a href="https://coq.inria.fr/">Coq</a>, are general purpose formal programming
+languages. Others are specialized tools:
+<a href="https://bblanche.gitlabpages.inria.fr/proverif/">ProVerif</a> is
+dedicated to proving properties about protocols.</p>
+<p>This tutorial focuses on proving properties with the
+<a href="https://fstar-lang.org/">F* programming language</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="panic-freedom"><a class="header" href="#panic-freedom">Panic freedom</a></h1>
+<p>Let's start with a simple example: a function that squares a <code>u8</code>
+integer. To extract this function to F* using hax, we simply need to
+run the command <code>cargo hax into fstar</code> in the directory of the crate
+in which the function <code>square</code> is defined.</p>
+<p><em>Note: throughout this tutorial, you can inspect the hax extraction to
+F* for each code Rust snippets, by clicking on the "F* extraction"
+tab.</em></p>
+<pre><code class="language-rust noplaypen">fn square(x: u8) -&gt; u8 {
+    x * x
+}</code></pre>
+<pre><code class="language-ocaml">let square (x: u8) : u8 = x *! x
+</code></pre>
+<p>Though, if we try to verify this function, F* is complaining about a
+subtyping issue: F* tells us that it is not able to prove that the
+result of the multiplication <code>x * x</code> fits the range of <code>u8</code>. The
+multiplication <code>x * x</code> might indeed be overflowing!</p>
+<p>For instance, running <code>square(16)</code> panics: <code>16 * 16</code> is <code>256</code>, which
+is just over <code>255</code>, the largest integer that fits <code>u8</code>. Rust does not
+ensure that functions are not <em>total</em>: a function might panic at any
+point, or might never terminate.</p>
+<h2 id="rust-and-panicking-code"><a class="header" href="#rust-and-panicking-code">Rust and panicking code</a></h2>
+<p>Quoting the chapter <a href="https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html">To <code>panic!</code> or Not to
+<code>panic!</code></a>
+from the Rust book:</p>
+<blockquote>
+<p>The <code>panic!</code> macro signals that your program is in a state it can't
+handle and lets you tell the process to stop instead of trying to
+proceed with invalid or incorrect values.</p>
+</blockquote>
+<p>A Rust program should panics only in a situation where an assumption
+or an invariant is broken: a panics models an <em>invalid</em> state. Formal
+verification is about proving such invalid state cannot occur, at all.</p>
+<p>From this observation emerges the urge of proving Rust programs to be
+panic-free!</p>
+<h2 id="fixing-our-squaring-function"><a class="header" href="#fixing-our-squaring-function">Fixing our squaring function</a></h2>
+<p>Let's come back to our example. There is an informal assumption to the
+multiplication operator in Rust: the inputs should be small enough so
+that the addition doesn't overflow.</p>
+<p>Note that Rust also provides <code>wrapping_mul</code>, a non-panicking variant
+of the multiplication on <code>u8</code> that wraps when the result is bigger
+than <code>255</code>. Replacing the common multiplication with <code>wrapping_mul</code> in
+<code>square</code> would fix the panic, but then, <code>square(256)</code> returns zero.
+Semantically, this is not what one would expect from <code>square</code>.</p>
+<p>Our problem is that our function <code>square</code> is well-defined only when
+its input is within <code>0</code> and <code>15</code>.</p>
+<h3 id="solution-a-reflect-the-partialness-of-the-function-in-rust"><a class="header" href="#solution-a-reflect-the-partialness-of-the-function-in-rust">Solution A: reflect the partialness of the function in Rust</a></h3>
+<p>A first solution is to make <code>square</code> return an <code>Option&lt;u8&gt;</code> instead of a <code>u8</code>:</p>
+<pre><code class="language-rust noplaypen">fn square_option(x: u8) -&gt; Option&lt;u8&gt; {
+    if x &gt;= 16 {
+        None
+    } else {
+        Some(x * x)
+    }
+}</code></pre>
+<pre><code class="language-ocaml">let square_option (x: u8) : Core.Option.t_Option u8 =
+  if x &gt;=. 16uy
+  then Core.Option.Option_None &lt;: Core.Option.t_Option u8
+  else Core.Option.Option_Some (x *! x) &lt;: Core.Option.t_Option u8
+</code></pre>
+<p>Here, F* is able to prove panic-freedom: calling <code>square</code> with any
+input is safe. Though, one may argue that <code>square</code>'s input being small
+enough should really be an assumption. Having to deal with the
+possible integer overflowing whenever squaring is a huge burden. Can
+we do better?</p>
+<h3 id="solution-b-add-a-precondition"><a class="header" href="#solution-b-add-a-precondition">Solution B: add a precondition</a></h3>
+<p>The type system of Rust doesn't allow the programmer to formalize the
+assumption that <code>multiply_by_two</code> expects a small <code>u8</code>. This becomes
+possible using hax: one can annotate a function with a pre-condition
+on its inputs.</p>
+<p>The pre-conditions and post-conditions on a function form a
+<em>contract</em>: "if you give me some inputs that satisfies a given formula
+(<em>the precondition</em>), I will produce a return value that satisfy
+another formula (<em>the postcondition</em>)". Outside this contracts,
+anything might happen: the function might panic, might run forever,
+erase your disk, or anything.</p>
+<p>The helper crate
+<a href="https://github.com/hacspec/hax/tree/main/hax-lib-macros">hax-lib-macros</a>
+provdes the <code>requires</code>
+<a href="https://doc.rust-lang.org/reference/procedural-macros.html">proc-macro</a>
+which lets user writting pre-conditions directly in Rust.</p>
+<pre><code class="language-rust noplaypen">#[hax_lib_macros::requires(x &lt; 16)]
+fn square_requires(x: u8) -&gt; u8 {
+    x * x
+}</code></pre>
+<pre><code class="language-ocaml">let square_requires (x: u8) 
+  : Pure u8 (requires x &lt;. 16uy) (requires fun _ -&gt; True)
+  = x *! x
+</code></pre>
+<p>With this precondition, F* is able to prove panic freedom. From now
+on, it is the responsability of the clients of <code>square</code> to respect the
+contact. The next step is thus be to verify, through hax extraction,
+that <code>square</code> is used correctly at every call site.</p>
+<h2 id="common-panicking-situations"><a class="header" href="#common-panicking-situations">Common panicking situations</a></h2>
+<p>Mutipication is not the only panicking function provided by the Rust
+library: most of the other integer arithmetic operation have such
+informal assumptions.</p>
+<p>Another source of panics is indexing. Indexing in an array, a slice or
+a vector is a partial operation: the index might be out of range.</p>
+<p>In the example folder of hax, you can find the <a href="https://github.com/hacspec/hax/blob/main/examples/chacha20/src/lib.rs"><code>chacha20</code>
+example</a>
+that makes use of pre-conditions to prove panic freedom.</p>
+<p>Another solution for safe indexing is to use the <a href="https://matklad.github.io/2018/06/04/newtype-index-pattern.html">newtype index
+pattern</a>,
+which is <a href="https://github.com/hacspec/hax/blob/d668de4d17e5ddee3a613068dc30b71353a9db4f/tests/attributes/src/lib.rs#L98-L126">also supported by
+hax</a>. The chapter <a href="tutorial/newtype.html">The newtype idiom</a> gives some.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="proving-properties"><a class="header" href="#proving-properties">Proving properties</a></h1>
+<p>In the last chapter, we proved one property on the <code>square</code> function:
+panic freedom. After adding a precondition, the signature of the
+<code>square</code> function was <code>x:u8 -&gt; Pure u8 (requires x &lt;. 16uy) (ensures fun _ -&gt; True)</code>.</p>
+<p>This contract stipulates that, given a small input, the function will
+<em>return a value</em>: it will not panic or diverge. We could enrich the
+contract of <code>square</code> with a post-condition about the fact it is a
+increasing function:</p>
+<pre><code class="language-rust noplaypen">#[hax::requires(x &lt; 16)]
+#[hax::ensures(|result| result &gt;= x)]
+fn square_ensures(x: u8) -&gt; u8 {
+    x * x
+}</code></pre>
+<pre><code class="language-ocaml">let square_ensures (x: u8)
+    : Pure u8
+      (requires x &lt;. 16uy)
+      (ensures fun result -&gt; result &gt;=. x) 
+    = x *! x
+</code></pre>
+<p>Such a simple post-condition is automatically proven by F*. The
+properties of our <code>square</code> function are not fasinating. Let's study a
+more interesting example: <a href="https://en.wikipedia.org/wiki/Barrett_reduction">Barrett reduction</a>.</p>
+<h2 id="a-concrete-example-of-contract-barrett-reduction"><a class="header" href="#a-concrete-example-of-contract-barrett-reduction">A concrete example of contract: Barrett reduction</a></h2>
+<p>While the correctness of <code>square</code> is obvious, the Barrett reduction is
+not.</p>
+<p>Given <code>value</code> a field element (a <code>i32</code> whose absolute value is at most
+<code>BARRET_R</code>), the function <code>barrett_reduce</code> defined below computes
+<code>result</code> such that:</p>
+<ul>
+<li><code>result ≡ value (mod FIELD_MODULUS)</code>;</li>
+<li>the absolute value of <code>result</code> is bound as follows:
+<code>|result| ≤ FIELD_MODULUS / 2 · (|value|/BARRETT_R + 1)</code>.</li>
+</ul>
+<p>It is easy to write this contract directly as <code>hax::requires</code> and
+<code>hax::ensures</code> annotations, as shown in the snippet below.</p>
+<pre><code class="language-rust noplaypen">type FieldElement = i32;
+const FIELD_MODULUS: i32 = 3329;
+const BARRETT_SHIFT: i64 = 26;
+const BARRETT_R: i64 = 0x4000000; // 2^26
+const BARRETT_MULTIPLIER: i64 = 20159; // ⌊(BARRETT_R / FIELD_MODULUS) + 1/2⌋
+
+#[hax::requires((i64::from(value) &gt;= -BARRETT_R &amp;&amp; i64::from(value) &lt;= BARRETT_R))]
+#[hax::ensures(|result| result &gt; -FIELD_MODULUS &amp;&amp; result &lt; FIELD_MODULUS
+                     &amp;&amp; result %  FIELD_MODULUS ==  value % FIELD_MODULUS)]
+fn barrett_reduce(value: i32) -&gt; i32 {
+    let t = i64::from(value) * BARRETT_MULTIPLIER;
+    let t = t + (BARRETT_R &gt;&gt; 1);
+
+    let quotient = t &gt;&gt; BARRETT_SHIFT;
+    let quotient = quotient as i32;
+
+    let sub = quotient * FIELD_MODULUS;
+
+    // Calls a lemma to prove that `(quotient * 3329) % 3329 = 0`
+    math::lemmas::cancel_mul_mod(quotient, 3329);
+
+    value - sub
+}</code></pre>
+<pre><code class="language-ocaml">unfold
+let t_FieldElement = i32
+
+let v_BARRETT_MULTIPLIER: i64 = 20159L
+
+let v_BARRETT_R: i64 = 67108864L
+
+let v_BARRETT_SHIFT: i64 = 26L
+
+let v_FIELD_MODULUS: i32 = 3329l
+
+let barrett_reduce (value: i32)
+    : Pure i32
+      (requires
+        (Core.Convert.f_from value &lt;: i64) &gt;=. (Core.Ops.Arith.Neg.neg v_BARRETT_R &lt;: i64) &amp;&amp;
+        (Core.Convert.f_from value &lt;: i64) &lt;=. v_BARRETT_R)
+      (ensures
+        fun result -&gt;
+          let result:i32 = result in
+          result &gt;. (Core.Ops.Arith.Neg.neg v_FIELD_MODULUS &lt;: i32) &amp;&amp; result &lt;. v_FIELD_MODULUS &amp;&amp;
+          (result %! v_FIELD_MODULUS &lt;: i32) =. (value %! v_FIELD_MODULUS &lt;: i32)) =
+  let t:i64 = (Core.Convert.f_from value &lt;: i64) *! v_BARRETT_MULTIPLIER in
+  let t:i64 = t +! (v_BARRETT_R &gt;&gt;! 1l &lt;: i64) in
+  let quotient:i64 = t &gt;&gt;! v_BARRETT_SHIFT in
+  let quotient:i32 = cast (quotient &lt;: i64) &lt;: i32 in
+  let sub:i32 = quotient *! v_FIELD_MODULUS in
+  let _:Prims.unit = Tutorial_src.Math.Lemmas.cancel_mul_mod quotient 3329l in
+  value -! sub
+</code></pre>
+<p>Note that we call to <code>cancel_mul_mod</code>, a lemma: in Rust, this have no
+effect, but in F*, that establishes that <code>(quotient * 3329) % 3329</code> is
+zero. With the help of that one lemma, F* is able to prove the
+reduction computes the expected result.</p>
+<p>This Barrett reduction examples is taken from
+<a href="https://github.com/cryspen/libcrux/tree/main">libcrux</a>'s proof of
+Kyber which is using hax and F*.</p>
+<p>This example showcases an <strong>intrinsic proof</strong>: the function
+<code>barrett_reduce</code> not only computes a value, but it also ship a proof
+that the post-condition holds. The pre-condition and post-condition
+gives the function a formal specification, which is useful both for
+further formal verification and for documentation purposes.</p>
+<h2 id="extrinsic-properties-with-lemmas"><a class="header" href="#extrinsic-properties-with-lemmas">Extrinsic properties with lemmas</a></h2>
+<p>Consider the <code>encrypt</code> and <code>decrypt</code> functions below. Those functions
+have no precondition, don't have particularly interesting properties
+individually. However, the compostion of the two yields an useful
+property: encrypting a ciphertext and decrypting the result with a
+same key produces the ciphertext again. <code>|c| decrypt(c, key)</code> is the
+inverse of <code>|p| encrypt(p, key)</code>.</p>
+<pre><code class="language-rust noplaypen">fn encrypt(plaintext: u32, key: u32) -&gt; u32 {
+    plaintext ^ key
+}
+
+fn decrypt(ciphertext: u32, key: u32) -&gt; u32 {
+    ciphertext ^ key
+}</code></pre>
+<pre><code class="language-ocaml">let decrypt (ciphertext key: u32) : u32 = ciphertext ^. key
+
+let encrypt (plaintext key: u32) : u32 = plaintext ^. key
+</code></pre>
+<p>In this situation, adding a pre- or a post-condition to either
+<code>encrypt</code> or <code>decrypt</code> is not useful: we want to state our inverse
+property about both of them. Better, we want this property to be
+stated directly in Rust: just as with pre and post-conditions, the
+Rust souces should clearly state what is to be proven.</p>
+<p>To this end, Hax provides a macro <code>lemma</code>. Below, the Rust function
+<code>encrypt_decrypt_identity</code> takes a key and a plaintext, and then
+states the inverse property. The body is empty: the details of the
+proof itself are not relevant, at this stage, we only care about the
+statement. The proof will be completed manually in the proof
+assistant.</p>
+<pre><code class="language-rust noplaypen">#[hax::lemma]
+#[hax::requires(true)]
+fn encrypt_decrypt_identity(
+    key: u32,
+    plaintext: u32,
+) -&gt; Proof&lt;{ decrypt(encrypt(plaintext, key), key) == plaintext }&gt; {
+}</code></pre>
+<pre><code class="language-ocaml">let encrypt_decrypt_identity (key plaintext: u32)
+    : Lemma (requires true)
+      (ensures (decrypt (encrypt plaintext key &lt;: u32) key &lt;: u32) =. plaintext) = ()
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="data-invariants"><a class="header" href="#data-invariants">Data invariants</a></h1>
+<p>In the two previous chapters we saw how to write specifications on
+functions, be it with pre and post-condition or with lemmas. In this
+chapter, we will see how to maintain invariants with precise types.</p>
+<h2 id="making-illegal-states-unpresentable"><a class="header" href="#making-illegal-states-unpresentable">Making illegal states unpresentable</a></h2>
+<p>With the Barrett example, we were working on a certain field, whose
+elements were represented as <code>i32</code> integers. To simplify, let's
+consider <code>F₃</code>, the finite field with 3 elements (say <code>0</code>, <code>1</code> and
+<code>2</code>). Every element of <code>F3</code> can be represented as a <code>i32</code> integers,
+but the converse doesn't hold: the vast majority of <code>i32</code> integers are
+not in of <code>F₃</code>.</p>
+<p>Representing <code>F₃</code> as <code>i32</code>s, every time we define a function consuming
+<code>F₃</code> elements, we face the risk to consume <em>illegal</em> elements. We are
+thus back to <a href="tutorial/panic-freedom.html">chapter 4.1</a>: we should panic on
+illegal elements, and add hax pre-conditions on every single
+function. That's not ideal: the property of being either <code>0</code>, <code>1</code> or
+<code>2</code> should be encoded directly on the type representing <code>F₃</code> elements.</p>
+<h3 id="enums-to-then-rescue"><a class="header" href="#enums-to-then-rescue"><code>enum</code>s to then rescue</a></h3>
+<p>Rust alone already can solve our representation issues with
+<a href="https://doc.rust-lang.org/book/ch06-00-enums.html">enums</a>! Below, we
+define the <code>enum</code> type <code>F3</code> which has only three constructor: <code>F3</code>
+represent exactly the elements of <code>F₃</code>, not more, not less.</p>
+<pre><code class="language-rust noplaypen">enum F3 {
+    E1,
+    E2,
+    E3,
+}</code></pre>
+<pre><code class="language-ocaml">type t_F3 =
+  | F3_E1 : t_F3
+  | F3_E2 : t_F3
+  | F3_E3 : t_F3
+
+let t_F3_cast_to_repr (x: t_F3) : isize =
+  match x with
+  | F3_E1  -&gt; isz 0
+  | F3_E2  -&gt; isz 1
+  | F3_E3  -&gt; isz 3
+</code></pre>
+<p>With <code>F3</code>, there doesn't exist illegal values at all: we can now
+define <a href="https://en.wikipedia.org/wiki/Partial_function"><em>total</em>
+functions</a> on <code>F₃</code>
+elements. We dropped altogether a source of panic!</p>
+<p>Soon you want to work with a bigger finite field: say
+<code>F₂₃₄₇</code>. Representing this many <code>q</code> different elements with an Rust
+enum would be very painful... The <code>enum</code> apporach falls appart.</p>
+<h3 id="newtype-and-refinements"><a class="header" href="#newtype-and-refinements">Newtype and refinements</a></h3>
+<p>Since we don't want an <code>enum</code> with 2347 elements, we have to revert to
+a type that can hold this many elements. The smallest integer type
+large enough provided by Rust is <code>u16</code>.</p>
+<p>Let's define <code>F</code> a
+<a href="https://matklad.github.io/2018/06/04/newtype-index-pattern.html">"newtype"</a>:
+a <a href="https://doc.rust-lang.org/book/ch05-00-structs.html">struct</a> with
+one <code>u16</code> field <code>v</code>. Notice the refinment annotation on <code>v</code>: the
+extraction of this type <code>F</code> via hax will result in a type enforcing
+<code>v</code> small enough.</p>
+<pre><code class="language-rust noplaypen">pub const Q: u16 = 2347;
+
+#[hax::attributes]
+pub struct F {
+    #[refine(v &lt; Q)]
+    pub v: u16,
+}</code></pre>
+<pre><code class="language-ocaml">let v_Q: u16 = 2347us
+
+type t_F = { f_v:f_v: u16{f_v &lt;. v_Q} }
+</code></pre>
+<p>In Rust, we can now define functions that operates on type <code>F</code>,
+assuming they are in bounds with respect to <code>F₂₃₄₇</code>: every such
+assumption will be checked and enforced by the proof assistant. As an
+example, below is the implementation of the addition for type <code>F</code>.</p>
+<pre><code class="language-rust noplaypen">use core::ops::Add;
+
+impl Add for F {
+    type Output = Self;
+    fn add(self, rhs: Self) -&gt; Self {
+        Self {
+            v: (self.v + rhs.v) % Q,
+        }
+    }
+}</code></pre>
+<pre><code class="language-ocaml">[@@ FStar.Tactics.Typeclasses.tcinstance]
+let impl: Core.Ops.Arith.t_Add t_F t_F =
+  {
+    f_Output = t_F;
+    f_add_pre = (fun (self: t_F) (rhs: t_F) -&gt; true);
+    f_add_post = (fun (self: t_F) (rhs: t_F) (out: t_F) -&gt; true);
+    f_add = fun (self: t_F) (rhs: t_F) -&gt; { 
+          f_v = (self.f_v +! rhs.f_v &lt;: u16) %! v_Q 
+      } &lt;: t_F
+  }
+</code></pre>
+<p>Here, F* is able to prove automatically that (1) the addition doesn't
+overflow and (2) that the invariant of <code>F</code> is preserved. The
+definition of type <code>F</code> in F* (named <code>t_F</code>) very explicitely requires
+the invariant as a refinement on <code>v</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="libraries"><a class="header" href="#libraries">Libraries</a></h1>
 <h1 id="macros-and-attributes"><a class="header" href="#macros-and-attributes">Macros and attributes</a></h1>
 <p>The hax engine understands only one attribute: <code>#[_hax::json(PAYLOAD)]</code>,

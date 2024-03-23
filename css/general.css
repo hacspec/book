@@ -232,3 +232,48 @@ kbd {
 .result-no-output {
     font-style: italic;
 }
+
+.rust-fstar-wrapper .buttons {
+    text-align: right;
+    margin-right: 8px;
+}
+.rust-fstar-wrapper button {
+    border: none;
+    background: none;
+    padding: 4px 14px;
+}
+.rust-fstar-wrapper .buttons .fstar-rust-snippet-active {
+    background: #f6f7f6;
+    opacity: 1;
+}
+.rust-fstar-wrapper .buttons button:hover {
+    opacity: 1;
+}
+.rust-fstar-wrapper .buttons .fstar-rust-snippet-hidden {
+    opacity: 0.4;
+}
+
+.rust-fstar-wrapper .snippets .snippet.fstar-rust-snippet-hidden {
+    display: none;
+}
+.rust-fstar-wrapper .snippets .snippet pre {
+    margin-top: 0;
+}
+
+input.user-checkable-checkbox {
+    transform: scale(1.5);
+    margin-right: 8px;
+    margin-left: 8px;
+}
+
+ul:has(> li > .user-checkable-checkbox) {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+li:has(> .user-checkable-checkbox) {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+

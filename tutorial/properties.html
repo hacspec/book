@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Properties on functions - hax</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Examples</div></li><li class="chapter-item expanded "><a href="../quick_start/intro.html"><strong aria-hidden="true">3.</strong> Quick start</a></li><li class="chapter-item expanded "><a href="../tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/panic-freedom.html"><strong aria-hidden="true">4.1.</strong> Panic freedom</a></li><li class="chapter-item expanded "><a href="../tutorial/properties.html" class="active"><strong aria-hidden="true">4.2.</strong> Properties on functions</a></li><li class="chapter-item expanded "><a href="../tutorial/data-invariants.html"><strong aria-hidden="true">4.3.</strong> Data invariants</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Proofs</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">5.1.</strong> F*</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> Coq</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.3.</strong> libcore</div></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Contributing</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">6.1.</strong> Structure</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.2.</strong> Hax Cargo subcommand</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.3.</strong> Frontend: the Rustc driver</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.4.</strong> Frontend: the exporter</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.5.</strong> Engine</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.6.</strong> Backends</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.7.</strong> Utilities</div></li><li class="chapter-item expanded "><a href="../contributing/libraries_macros.html"><strong aria-hidden="true">6.8.</strong> Libraries & Macros</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.9.</strong> libcore</div></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><div>Contributors</div></li><li class="chapter-item expanded affix "><a href="../misc/archive.html">Archive</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">hax</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="proving-properties"><a class="header" href="#proving-properties">Proving properties</a></h1>
+<p>In the last chapter, we proved one property on the <code>square</code> function:
+panic freedom. After adding a precondition, the signature of the
+<code>square</code> function was <code>x:u8 -&gt; Pure u8 (requires x &lt;. 16uy) (ensures fun _ -&gt; True)</code>.</p>
+<p>This contract stipulates that, given a small input, the function will
+<em>return a value</em>: it will not panic or diverge. We could enrich the
+contract of <code>square</code> with a post-condition about the fact it is a
+increasing function:</p>
+<pre><code class="language-rust noplaypen">#[hax::requires(x &lt; 16)]
+#[hax::ensures(|result| result &gt;= x)]
+fn square_ensures(x: u8) -&gt; u8 {
+    x * x
+}</code></pre>
+<pre><code class="language-ocaml">let square_ensures (x: u8)
+    : Pure u8
+      (requires x &lt;. 16uy)
+      (ensures fun result -&gt; result &gt;=. x) 
+    = x *! x
+</code></pre>
+<p>Such a simple post-condition is automatically proven by F*. The
+properties of our <code>square</code> function are not fasinating. Let's study a
+more interesting example: <a href="https://en.wikipedia.org/wiki/Barrett_reduction">Barrett reduction</a>.</p>
+<h2 id="a-concrete-example-of-contract-barrett-reduction"><a class="header" href="#a-concrete-example-of-contract-barrett-reduction">A concrete example of contract: Barrett reduction</a></h2>
+<p>While the correctness of <code>square</code> is obvious, the Barrett reduction is
+not.</p>
+<p>Given <code>value</code> a field element (a <code>i32</code> whose absolute value is at most
+<code>BARRET_R</code>), the function <code>barrett_reduce</code> defined below computes
+<code>result</code> such that:</p>
+<ul>
+<li><code>result ≡ value (mod FIELD_MODULUS)</code>;</li>
+<li>the absolute value of <code>result</code> is bound as follows:
+<code>|result| ≤ FIELD_MODULUS / 2 · (|value|/BARRETT_R + 1)</code>.</li>
+</ul>
+<p>It is easy to write this contract directly as <code>hax::requires</code> and
+<code>hax::ensures</code> annotations, as shown in the snippet below.</p>
+<pre><code class="language-rust noplaypen">type FieldElement = i32;
+const FIELD_MODULUS: i32 = 3329;
+const BARRETT_SHIFT: i64 = 26;
+const BARRETT_R: i64 = 0x4000000; // 2^26
+const BARRETT_MULTIPLIER: i64 = 20159; // ⌊(BARRETT_R / FIELD_MODULUS) + 1/2⌋
+
+#[hax::requires((i64::from(value) &gt;= -BARRETT_R &amp;&amp; i64::from(value) &lt;= BARRETT_R))]
+#[hax::ensures(|result| result &gt; -FIELD_MODULUS &amp;&amp; result &lt; FIELD_MODULUS
+                     &amp;&amp; result %  FIELD_MODULUS ==  value % FIELD_MODULUS)]
+fn barrett_reduce(value: i32) -&gt; i32 {
+    let t = i64::from(value) * BARRETT_MULTIPLIER;
+    let t = t + (BARRETT_R &gt;&gt; 1);
+
+    let quotient = t &gt;&gt; BARRETT_SHIFT;
+    let quotient = quotient as i32;
+
+    let sub = quotient * FIELD_MODULUS;
+
+    // Calls a lemma to prove that `(quotient * 3329) % 3329 = 0`
+    math::lemmas::cancel_mul_mod(quotient, 3329);
+
+    value - sub
+}</code></pre>
+<pre><code class="language-ocaml">unfold
+let t_FieldElement = i32
+
+let v_BARRETT_MULTIPLIER: i64 = 20159L
+
+let v_BARRETT_R: i64 = 67108864L
+
+let v_BARRETT_SHIFT: i64 = 26L
+
+let v_FIELD_MODULUS: i32 = 3329l
+
+let barrett_reduce (value: i32)
+    : Pure i32
+      (requires
+        (Core.Convert.f_from value &lt;: i64) &gt;=. (Core.Ops.Arith.Neg.neg v_BARRETT_R &lt;: i64) &amp;&amp;
+        (Core.Convert.f_from value &lt;: i64) &lt;=. v_BARRETT_R)
+      (ensures
+        fun result -&gt;
+          let result:i32 = result in
+          result &gt;. (Core.Ops.Arith.Neg.neg v_FIELD_MODULUS &lt;: i32) &amp;&amp; result &lt;. v_FIELD_MODULUS &amp;&amp;
+          (result %! v_FIELD_MODULUS &lt;: i32) =. (value %! v_FIELD_MODULUS &lt;: i32)) =
+  let t:i64 = (Core.Convert.f_from value &lt;: i64) *! v_BARRETT_MULTIPLIER in
+  let t:i64 = t +! (v_BARRETT_R &gt;&gt;! 1l &lt;: i64) in
+  let quotient:i64 = t &gt;&gt;! v_BARRETT_SHIFT in
+  let quotient:i32 = cast (quotient &lt;: i64) &lt;: i32 in
+  let sub:i32 = quotient *! v_FIELD_MODULUS in
+  let _:Prims.unit = Tutorial_src.Math.Lemmas.cancel_mul_mod quotient 3329l in
+  value -! sub
+</code></pre>
+<p>Note that we call to <code>cancel_mul_mod</code>, a lemma: in Rust, this have no
+effect, but in F*, that establishes that <code>(quotient * 3329) % 3329</code> is
+zero. With the help of that one lemma, F* is able to prove the
+reduction computes the expected result.</p>
+<p>This Barrett reduction examples is taken from
+<a href="https://github.com/cryspen/libcrux/tree/main">libcrux</a>'s proof of
+Kyber which is using hax and F*.</p>
+<p>This example showcases an <strong>intrinsic proof</strong>: the function
+<code>barrett_reduce</code> not only computes a value, but it also ship a proof
+that the post-condition holds. The pre-condition and post-condition
+gives the function a formal specification, which is useful both for
+further formal verification and for documentation purposes.</p>
+<h2 id="extrinsic-properties-with-lemmas"><a class="header" href="#extrinsic-properties-with-lemmas">Extrinsic properties with lemmas</a></h2>
+<p>Consider the <code>encrypt</code> and <code>decrypt</code> functions below. Those functions
+have no precondition, don't have particularly interesting properties
+individually. However, the compostion of the two yields an useful
+property: encrypting a ciphertext and decrypting the result with a
+same key produces the ciphertext again. <code>|c| decrypt(c, key)</code> is the
+inverse of <code>|p| encrypt(p, key)</code>.</p>
+<pre><code class="language-rust noplaypen">fn encrypt(plaintext: u32, key: u32) -&gt; u32 {
+    plaintext ^ key
+}
+
+fn decrypt(ciphertext: u32, key: u32) -&gt; u32 {
+    ciphertext ^ key
+}</code></pre>
+<pre><code class="language-ocaml">let decrypt (ciphertext key: u32) : u32 = ciphertext ^. key
+
+let encrypt (plaintext key: u32) : u32 = plaintext ^. key
+</code></pre>
+<p>In this situation, adding a pre- or a post-condition to either
+<code>encrypt</code> or <code>decrypt</code> is not useful: we want to state our inverse
+property about both of them. Better, we want this property to be
+stated directly in Rust: just as with pre and post-conditions, the
+Rust souces should clearly state what is to be proven.</p>
+<p>To this end, Hax provides a macro <code>lemma</code>. Below, the Rust function
+<code>encrypt_decrypt_identity</code> takes a key and a plaintext, and then
+states the inverse property. The body is empty: the details of the
+proof itself are not relevant, at this stage, we only care about the
+statement. The proof will be completed manually in the proof
+assistant.</p>
+<pre><code class="language-rust noplaypen">#[hax::lemma]
+#[hax::requires(true)]
+fn encrypt_decrypt_identity(
+    key: u32,
+    plaintext: u32,
+) -&gt; Proof&lt;{ decrypt(encrypt(plaintext, key), key) == plaintext }&gt; {
+}</code></pre>
+<pre><code class="language-ocaml">let encrypt_decrypt_identity (key plaintext: u32)
+    : Lemma (requires true)
+      (ensures (decrypt (encrypt plaintext key &lt;: u32) key &lt;: u32) =. plaintext) = ()
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../tutorial/panic-freedom.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../tutorial/data-invariants.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../tutorial/panic-freedom.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../tutorial/data-invariants.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
