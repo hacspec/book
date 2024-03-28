@@ -50,8 +50,8 @@ fn barrett_reduce(value: i32) -> i32 {
 
     let sub = quotient * FIELD_MODULUS;
 
-    // Calls a lemma to prove that `(quotient * 3329) % 3329 = 0`
-    math::lemmas::cancel_mul_mod(quotient, 3329);
+    // Here a lemma to prove that `(quotient * 3329) % 3329 = 0`
+    // may have to be called in F*.
 
     value - sub
 }
