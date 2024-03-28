@@ -228,8 +228,8 @@ fn barrett_reduce(value: i32) -&gt; i32 {
 
     let sub = quotient * FIELD_MODULUS;
 
-    // Calls a lemma to prove that `(quotient * 3329) % 3329 = 0`
-    math::lemmas::cancel_mul_mod(quotient, 3329);
+    // Here a lemma to prove that `(quotient * 3329) % 3329 = 0`
+    // may have to be called in F*.
 
     value - sub
 }</code></pre>
@@ -262,10 +262,16 @@ let barrett_reduce (value: i32)
   let _:Prims.unit = Tutorial_src.Math.Lemmas.cancel_mul_mod quotient 3329l in
   value -! sub
 </code></pre>
-<p>Note that we call to <code>cancel_mul_mod</code>, a lemma: in Rust, this have no
-effect, but in F*, that establishes that <code>(quotient * 3329) % 3329</code> is
-zero. With the help of that one lemma, F* is able to prove the
-reduction computes the expected result.</p>
+<!-- Note that we call to `cancel_mul_mod`, a lemma: in Rust, this have no
+effect, but in F*, that establishes that `(quotient * 3329) % 3329` is
+zero. -->
+<p>Before returning, a lemma may have to be called in F* to prove the correctness
+of the reduction.
+The lemma is <code>Math.Lemmas.cancel_mul_mod (v quotient) 3329;</code>, which establishes
+that <code>(quotient * 3329) % 3329</code> is zero.
+With the help of that one lemma, F* is able to prove the
+reduction computes the expected result.
+(We may expose lemmas like this to call from Rust directly in future.)</p>
 <p>This Barrett reduction examples is taken from
 <a href="https://github.com/cryspen/libcrux/tree/main">libcrux</a>'s proof of
 Kyber which is using hax and F*.</p>
