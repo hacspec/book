@@ -31,6 +31,12 @@ After we have reached our modest goals (more on those in the next
 section) with this tutorial backend, I will give some perspective on
 things we did not cover in the tutorial and which could be next steps.
 
+
+The code for this toy backend lives on the
+[`jonas/backend-tutorial`](https://github.com/hacspec/hax/tree/jonas/backend-tutorial)
+branch of `hax`.
+
+
 ## Before we start: Defining the backend's purpose
 
 Before we get started, we will have to get an understanding what we
