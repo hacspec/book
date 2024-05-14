@@ -193,50 +193,65 @@ These specifications can be translated into formal languages with hax.</p>
 describing hacspec <a href="/archive">here</a>, but keep in mind most of the information
 there is outdated.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start-with-hax-and-f"><a class="header" href="#quick-start-with-hax-and-f">Quick start with hax and F*</a></h1>
-<p>You want to try hax out on a Rust crate of yours? This chapter is what you are looking for!</p>
+<p>Do you want to try hax out on a Rust crate of yours? This chapter is
+what you are looking for!</p>
 <h2 id="setup-the-tools"><a class="header" href="#setup-the-tools">Setup the tools</a></h2>
 <ul>
 <li><strong>user-checkable</strong> <a href="https://github.com/hacspec/hax?tab=readme-ov-file#installation">Install the hax toolchain</a>.<br />
 <span style="margin-right:30px;"></span>🪄 Running <code>cargo hax --version</code> should print some version info.</li>
-<li><strong>user-checkable</strong> <a href="https://github.com/FStarLang/FStar/blob/master/INSTALL.md">Install F*</a></li>
+<li><strong>user-checkable</strong> <a href="https://github.com/FStarLang/FStar/blob/master/INSTALL.md">Install F*</a> <em>(optional: only if want to run F*)</em></li>
 </ul>
 <h2 id="setup-the-crate-you-want-to-verify"><a class="header" href="#setup-the-crate-you-want-to-verify">Setup the crate you want to verify</a></h2>
-<p><em>Note: the instructions below assume you are in the folder of the specifc crate (<strong>not workspace!</strong>) you want to extract.</em></p>
+<p><em>Note: the instructions below assume you are in the folder of the specific crate (<strong>not workspace!</strong>) you want to extract.</em></p>
+<p><em>Note: this part is useful only if you want to run F*.</em></p>
 <ul>
 <li><strong>user-checkable</strong> Create the folder <code>proofs/fstar/extraction</code> folder, right next to the <code>Cargo.toml</code> of the crate you want to verify.<br />
 <span style="margin-right:30px;"></span>🪄 <code>mkdir -p proofs/fstar/extraction</code></li>
 <li><strong>user-checkable</strong> Copy <a href="https://gist.github.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3">this makefile</a> to <code>proofs/fstar/extraction/Makefile</code>.<br />
 <span style="margin-right:30px;"></span>🪄 <code>curl -O proofs/fstar/extraction/Makefile https://gist.githubusercontent.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3/raw/64fd922820b64d90f4d26eaf70ed02e694c30719/Makefile</code></li>
-<li><strong>user-checkable</strong> Add <code>hax-lib</code> and <code>hax-lib-macros</code> as dependencies to your crate.<br />
-<span style="margin-right:30px;"></span>🪄 <code>cargo add --git https://github.com/hacspec/hax hax-lib hax-lib-macros</code></li>
+<li><strong>user-checkable</strong> Add <code>hax-lib</code> as a dependency to your crate.<br />
+<span style="margin-right:30px;"></span>🪄 <code>cargo add --git https://github.com/hacspec/hax hax-lib</code><br />
+<span style="margin-right:30px;"></span><span style="opacity: 0;">🪄</span> <em>(<code>hax-lib</code> is not mandatory, but this guide assumes it is present)</em></li>
 </ul>
-<h2 id="extract-the-functions-you-are-interested-in"><a class="header" href="#extract-the-functions-you-are-interested-in">Extract the functions you are interested in</a></h2>
+<h2 id="partial-extraction"><a class="header" href="#partial-extraction">Partial extraction</a></h2>
 <p><em>Note: the instructions below assume you are in the folder of the
 specific crate you want to extract.</em></p>
 <p>Run the command <code>cargo hax into fstar</code> to extract every item of your
 crate as F* modules in the subfolder <code>proofs/fstar/extraction</code>.</p>
-<p>Probably, your Rust crate contains mixed kinds of code: some is
+<p><strong>What is critical? What is worth verifying?</strong><br />
+Probably, your Rust crate contains mixed kinds of code: some parts are
 critical (e.g. the library functions at the core of your crate) while
-some other is not (e.g. the binary driver that wrap the library). In
-this case, you likely want to extract only partially your crate, so
-that you can focus on the important part.</p>
-<p>If you want to extract a function
+some others are not (e.g. the binary driver that wraps the
+library). In this case, you likely want to extract only partially your
+crate, so that you can focus on the important part.</p>
+<p><strong>Partial extraction.</strong><br />
+If you want to extract a function
 <code>your_crate::some_module::my_function</code>, you need to tell <code>hax</code> to
-extract nothing but <code>my_function</code>:
-<code>cargo hax into -i '-** +your_crate::some_module::my_function' fstar</code>.
-Note this command will extract <code>my_function</code> but also any item
+extract nothing but <code>my_function</code>:</p>
+<pre><code class="language-bash">cargo hax into -i '-** +your_crate::some_module::my_function' fstar
+</code></pre>
+<p>Note this command will extract <code>my_function</code> but also any item
 (function, type, etc.) from your crate which is used directly or
-indirectly by <code>my_function</code>.</p>
+indirectly by <code>my_function</code>. If you don't want the dependency, use
+<code>+!</code> instead of <code>+</code> in the <code>-i</code> flag.</p>
+<p><strong>Unsupported Rust code.</strong><br />
+hax <a href="https://github.com/hacspec/hax?tab=readme-ov-file#supported-subset-of-the-rust-language">doesn't support every Rust
+constructs</a>,
+<code>unsafe</code> code, or complicated mutation scheme. That is another reason
+for extracting only a part of your crate. When running hax, if an item
+of your crate, say a function <code>my_crate::f</code>, is not handled by hax,
+you can append <code>-my_crate::f</code> to the <code>-i</code> flag. You can learn more
+about the <code>-i</code> flag <a href="quick_start/../faq/include-flags.html">in the FAQ</a>.</p>
 <h2 id="start-f-verification"><a class="header" href="#start-f-verification">Start F* verification</a></h2>
 <p>After running the hax toolchain on your Rust code, you will end up
 with various F* modules in the <code>proofs/fstar/extraction</code> folder. The
 <code>Makefile</code> in <code>proofs/fstar/extraction</code> will run F*.</p>
 <ol>
 <li><strong>Lax check:</strong> the first step is to run <code>OTHERFLAGS="--lax" make</code>,
-which will run F* in "lax" mode. The lax mode just make sure basic
+which will run F* in "lax" mode. The lax mode just makes sure basic
 typechecking works: it is not proving anything. This first step is
 important because there might be missing libraries. If F* is not
-able to find a defintion, it is probably a <code>libcore</code> issue: you
+able to find a definition, it is probably a <code>libcore</code> issue: you
 probably need to edit the F* library, which lives in the
 <code>proofs-libs</code> directory in the root of the hax repo.</li>
 <li><strong>Typecheck:</strong> the second step is to run <code>make</code>. This will ask F*
