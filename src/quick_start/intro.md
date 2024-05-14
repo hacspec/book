@@ -20,7 +20,8 @@ You want to try hax out on a Rust crate of yours? This chapter is what you are l
  - **user-checkable** Copy [this makefile](https://gist.github.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3) to `proofs/fstar/extraction/Makefile`.  
    <span style="margin-right:30px;"></span>🪄 `curl -O proofs/fstar/extraction/Makefile https://gist.githubusercontent.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3/raw/64fd922820b64d90f4d26eaf70ed02e694c30719/Makefile`
  - **user-checkable** Add `hax-lib` as dependencies to your crate.  
-   <span style="margin-right:30px;"></span>🪄 `cargo add --git https://github.com/hacspec/hax hax-lib`
+   <span style="margin-right:30px;"></span>🪄 `cargo add --git https://github.com/hacspec/hax hax-lib`  
+   <span style="margin-right:30px;"></span><span style="opacity: 0;">🪄</span> *(`hax-lib` is not mandatory, but this guide assumes it is present)*
 
 ## Extract the functions you are interested in
 
