@@ -50,7 +50,8 @@ cargo hax into -i '-** +your_crate::some_module::my_function' fstar
 
 Note this command will extract `my_function` but also any item
 (function, type, etc.) from your crate which is used directly or
-indirectly by `my_function`.
+indirectly by `my_function`. If you don't want the dependency, use
+`+!` instead of `+` in the `-i` flag.
 
 **Unsupported Rust code.**  
 hax [doesn't support every Rust
@@ -58,7 +59,8 @@ constructs](https://github.com/hacspec/hax?tab=readme-ov-file#supported-subset-o
 `unsafe` code or complicated mutation schemes. That is another reason
 for extracting only a part of your crate. When running hax, if an item
 of your crate, say a function `my_crate::f`, is not handled by hax,
-you can append `-my_crate::f` to the `-i` flag. You can learn more about the `-i` flag [in the FAQ](faq/include-flags.html).
+you can append `-my_crate::f` to the `-i` flag. You can learn more
+about the `-i` flag [in the FAQ](faq/include-flags.html).
 
 
 
