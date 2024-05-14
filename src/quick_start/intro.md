@@ -23,7 +23,7 @@ You want to try hax out on a Rust crate of yours? This chapter is what you are l
    <span style="margin-right:30px;"></span>🪄 `cargo add --git https://github.com/hacspec/hax hax-lib`  
    <span style="margin-right:30px;"></span><span style="opacity: 0;">🪄</span> *(`hax-lib` is not mandatory, but this guide assumes it is present)*
 
-## Extract the functions you are interested in
+## Partial extraction
 
 *Note: the instructions below assume you are in the folder of the
 specific crate you want to extract.*
@@ -31,19 +31,36 @@ specific crate you want to extract.*
 Run the command `cargo hax into fstar` to extract every item of your
 crate as F* modules in the subfolder `proofs/fstar/extraction`.
 
+**What is critical? What is worth verifying?**  
 Probably, your Rust crate contains mixed kinds of code: some is
 critical (e.g. the library functions at the core of your crate) while
 some other is not (e.g. the binary driver that wrap the library). In
 this case, you likely want to extract only partially your crate, so
 that you can focus on the important part.
 
+
+**Partial extraction.**  
 If you want to extract a function
 `your_crate::some_module::my_function`, you need to tell `hax` to
-extract nothing but `my_function`: 
-`cargo hax into -i '-** +your_crate::some_module::my_function' fstar`.
+extract nothing but `my_function`:
+
+```bash
+cargo hax into -i '-** +your_crate::some_module::my_function' fstar
+```
+
 Note this command will extract `my_function` but also any item
 (function, type, etc.) from your crate which is used directly or
 indirectly by `my_function`.
+
+**Unsupported Rust code.**  
+hax [doesn't support every Rust
+constructs](https://github.com/hacspec/hax?tab=readme-ov-file#supported-subset-of-the-rust-language),
+`unsafe` code or complicated mutation schemes. That is another reason
+for extracting only a part of your crate. When running hax, if an item
+of your crate, say a function `my_crate::f`, is not handled by hax,
+you can append `-my_crate::f` to the `-i` flag. You can learn more about the `-i` flag [in the FAQ](faq/include-flags.html).
+
+
 
 ## Start F* verification
 After running the hax toolchain on your Rust code, you will end up
