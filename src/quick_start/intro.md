@@ -19,7 +19,7 @@ what you are looking for!
  - **user-checkable** Create the folder `proofs/fstar/extraction` folder, right next to the `Cargo.toml` of the crate you want to verify.  
    <span style="margin-right:30px;"></span>🪄 `mkdir -p proofs/fstar/extraction`
  - **user-checkable** Copy [this makefile](https://gist.github.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3) to `proofs/fstar/extraction/Makefile`.  
-   <span style="margin-right:30px;"></span>🪄 `curl -O proofs/fstar/extraction/Makefile https://gist.githubusercontent.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3/raw/64fd922820b64d90f4d26eaf70ed02e694c30719/Makefile`
+   <span style="margin-right:30px;"></span>🪄 `curl -O proofs/fstar/extraction/Makefile https://gist.githubusercontent.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3/raw/Makefile`
  - **user-checkable** Add `hax-lib` as a dependency to your crate.  
    <span style="margin-right:30px;"></span>🪄 `cargo add --git https://github.com/hacspec/hax hax-lib`  
    <span style="margin-right:30px;"></span><span style="opacity: 0;">🪄</span> *(`hax-lib` is not mandatory, but this guide assumes it is present)*
