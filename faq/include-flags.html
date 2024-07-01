@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The include flag: which items should be extracted, and how? - hax</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Examples</div></li><li class="chapter-item expanded "><a href="../quick_start/intro.html"><strong aria-hidden="true">3.</strong> Quick start</a></li><li class="chapter-item expanded "><a href="../tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/panic-freedom.html"><strong aria-hidden="true">4.1.</strong> Panic freedom</a></li><li class="chapter-item expanded "><a href="../tutorial/properties.html"><strong aria-hidden="true">4.2.</strong> Properties on functions</a></li><li class="chapter-item expanded "><a href="../tutorial/data-invariants.html"><strong aria-hidden="true">4.3.</strong> Data invariants</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Proofs</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">5.1.</strong> F*</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> Coq</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.3.</strong> libcore</div></li></ol></li><li class="chapter-item expanded "><a href="../faq/into.html"><strong aria-hidden="true">6.</strong> Troubleshooting/FAQ</a></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">6.1.</strong> Command line usage</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../faq/include-flags.html" class="active"><strong aria-hidden="true">6.1.1.</strong> The include flag: which items should be extracted, and how?</a></li></ol></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Contributing</div></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">7.1.</strong> Structure</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.2.</strong> Hax Cargo subcommand</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.3.</strong> Frontend: the Rustc driver</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.4.</strong> Frontend: the exporter</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.5.</strong> Engine</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.6.</strong> Backends</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.7.</strong> Utilities</div></li><li class="chapter-item expanded "><a href="../contributing/libraries_macros.html"><strong aria-hidden="true">7.8.</strong> Libraries & Macros</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.9.</strong> libcore</div></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><div>Contributors</div></li><li class="chapter-item expanded affix "><a href="../misc/archive.html">Archive</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">hax</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="the-include-flag-which-items-should-be-extracted-and-how"><a class="header" href="#the-include-flag-which-items-should-be-extracted-and-how">The include flag: which items should be extracted, and how?</a></h1>
+<p>Often, you need to extract only a portion of a crate. The subcommand
+<code>cargo hax into</code> accepts the <code>-i</code> flag which will help you to include
+or exclude items from the extraction.</p>
+<p>Consider the following <code>lib.rs</code> module of a crate named <code>mycrate</code>.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn interesting_function() { aux() }
+fn aux() { foo::f() }
+fn something_else() { ... }
+mod foo {
+  fn f() { ... }
+  fn g() { ... }
+  fn h() { ... }
+  fn interesting_function() { something() }
+  fn something() { ... }
+  mod bar {
+    fn interesting_function() { ... }
+  }
+}
+fn not_that_one() { not_that_one_dependency() }
+fn not_that_one_dependency() { ... }
+<span class="boring">}</span></code></pre></pre>
+<p>Here are a few examples of the <code>-i</code> flag.</p>
+<ul>
+<li><code>cargo hax into -i '-** +mycrate::**::interesting_function' &lt;BACKEND&gt;</code><br />
+The first clause <code>-**</code> makes items not to be extracted by default.<br />
+This extracts any item that matches the <a href="https://en.wikipedia.org/wiki/Glob_(programming)">glob pattern</a> <code>mycrate::**::interesting_function</code>, but also any (local) dependencies of such items. <code>**</code> matches any sub-path.<br />
+Thus, the following items will be extracted:
+<ul>
+<li><code>mycrate::interesting_function</code> (direct match);</li>
+<li><code>mycrate::foo::interesting_function</code> (direct match);</li>
+<li><code>mycrate::foo::bar::interesting_function</code> (direct match);</li>
+<li><code>mycrate::aux</code> (dependency of <code>mycrate::interesting_function</code>);</li>
+<li><code>mycrate::foo::f</code> (dependency of <code>mycrate::aux</code>);</li>
+<li><code>mycrate::foo::something</code> (dependency of <code>mycrate::foo::interesting_function</code>).</li>
+</ul>
+</li>
+<li><code>cargo hax into -i '+** -*::not_that_one' &lt;BACKEND&gt;</code><br />
+Extracts any item but the ones named <code>&lt;crate&gt;::not_that_one</code>. Here,
+everything is extracted but <code>mycrate::not_that_one</code>, including
+<code>mycrate::not_that_one_dependency</code>.</li>
+<li><code>cargo hax into -i '-** +!mycrate::interesting_function' &lt;BACKEND&gt;</code><br />
+Extracts only <code>mycrate::interesting_function</code>, not taking into
+account dependencies.</li>
+<li><code>cargo hax into -i '-** +~mycrate::interesting_function' &lt;BACKEND&gt;</code><br />
+Extracts <code>mycrate::interesting_function</code> and its direct
+dependencies (no transitivity): this includes <code>mycrate::aux</code>, but
+not <code>mycrate::foo::f</code>.</li>
+</ul>
+<p>Now, suppose we add the function <code>not_extracting_function</code>
+below. <code>not_extracting_function</code> uses some unsafe code: this is not
+supported by hax. However, let's suppose we have a functional model
+for this function and that we still want to extract it as an
+axiomatized, assumed symbol.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn not_extracting_function(u8) -&gt; u8 {
+    ... 
+    unsafe { ... }
+    ...
+}
+<span class="boring">}</span></code></pre></pre>
+<ul>
+<li><code>cargo hax into -i '+:mycrate::not_extracting_function' &lt;BACKEND&gt;</code><br />
+Extracts <code>mycrate::not_extracting_function</code> in signature-only mode.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../faq/into.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../contributing/libraries_macros.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../faq/into.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../contributing/libraries_macros.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
