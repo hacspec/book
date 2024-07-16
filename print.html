@@ -193,19 +193,19 @@ These specifications can be translated into formal languages with hax.</p>
 what you are looking for!</p>
 <h2 id="setup-the-tools"><a class="header" href="#setup-the-tools">Setup the tools</a></h2>
 <ul>
-<li><strong>user-checkable</strong> <a href="https://github.com/hacspec/hax?tab=readme-ov-file#installation">Install the hax toolchain</a>.<br />
+<li><input type="checkbox" class="user-checkable"/> <a href="https://github.com/hacspec/hax?tab=readme-ov-file#installation">Install the hax toolchain</a>.<br />
 <span style="margin-right:30px;"></span>🪄 Running <code>cargo hax --version</code> should print some version info.</li>
-<li><strong>user-checkable</strong> <a href="https://github.com/FStarLang/FStar/blob/master/INSTALL.md">Install F*</a> <em>(optional: only if want to run F*)</em></li>
+<li><input type="checkbox" class="user-checkable"/> <a href="https://github.com/FStarLang/FStar/blob/master/INSTALL.md">Install F*</a> <em>(optional: only if want to run F*)</em></li>
 </ul>
 <h2 id="setup-the-crate-you-want-to-verify"><a class="header" href="#setup-the-crate-you-want-to-verify">Setup the crate you want to verify</a></h2>
 <p><em>Note: the instructions below assume you are in the folder of the specific crate (<strong>not workspace!</strong>) you want to extract.</em></p>
 <p><em>Note: this part is useful only if you want to run F*.</em></p>
 <ul>
-<li><strong>user-checkable</strong> Create the folder <code>proofs/fstar/extraction</code> folder, right next to the <code>Cargo.toml</code> of the crate you want to verify.<br />
+<li><input type="checkbox" class="user-checkable"/> Create the folder <code>proofs/fstar/extraction</code> folder, right next to the <code>Cargo.toml</code> of the crate you want to verify.<br />
 <span style="margin-right:30px;"></span>🪄 <code>mkdir -p proofs/fstar/extraction</code></li>
-<li><strong>user-checkable</strong> Copy <a href="https://gist.github.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3">this makefile</a> to <code>proofs/fstar/extraction/Makefile</code>.<br />
+<li><input type="checkbox" class="user-checkable"/> Copy <a href="https://gist.github.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3">this makefile</a> to <code>proofs/fstar/extraction/Makefile</code>.<br />
 <span style="margin-right:30px;"></span>🪄 <code>curl -o proofs/fstar/extraction/Makefile https://gist.githubusercontent.com/W95Psp/4c304132a1f85c5af4e4959dd6b356c3/raw/Makefile</code></li>
-<li><strong>user-checkable</strong> Add <code>hax-lib</code> as a dependency to your crate.<br />
+<li><input type="checkbox" class="user-checkable"/> Add <code>hax-lib</code> as a dependency to your crate.<br />
 <span style="margin-right:30px;"></span>🪄 <code>cargo add --git https://github.com/hacspec/hax hax-lib</code><br />
 <span style="margin-right:30px;"></span><span style="opacity: 0;">🪄</span> <em>(<code>hax-lib</code> is not mandatory, but this guide assumes it is present)</em></li>
 </ul>
