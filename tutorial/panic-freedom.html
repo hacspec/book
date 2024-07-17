@@ -194,7 +194,7 @@ result of the multiplication <code>x * x</code> fits the range of <code>u8</code
 multiplication <code>x * x</code> might indeed be overflowing!</p>
 <p>For instance, running <code>square(16)</code> panics: <code>16 * 16</code> is <code>256</code>, which
 is just over <code>255</code>, the largest integer that fits <code>u8</code>. Rust does not
-ensure that functions are not <em>total</em>: a function might panic at any
+ensure that functions are <em>total</em>: a function might panic at any
 point, or might never terminate.</p>
 <h2 id="rust-and-panicking-code"><a class="header" href="#rust-and-panicking-code">Rust and panicking code</a></h2>
 <p>Quoting the chapter <a href="https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html">To <code>panic!</code> or Not to
@@ -242,7 +242,7 @@ possible integer overflowing whenever squaring is a huge burden. Can
 we do better?</p>
 <h3 id="solution-b-add-a-precondition"><a class="header" href="#solution-b-add-a-precondition">Solution B: add a precondition</a></h3>
 <p>The type system of Rust doesn't allow the programmer to formalize the
-assumption that <code>multiply_by_two</code> expects a small <code>u8</code>. This becomes
+assumption that <code>square</code> expects a small <code>u8</code>. This becomes
 possible using hax: one can annotate a function with a pre-condition
 on its inputs.</p>
 <p>The pre-conditions and post-conditions on a function form a
@@ -256,7 +256,7 @@ erase your disk, or anything.</p>
 provdes the <code>requires</code>
 <a href="https://doc.rust-lang.org/reference/procedural-macros.html">proc-macro</a>
 which lets user writting pre-conditions directly in Rust.</p>
-<pre><code class="language-rust noplaypen">#[hax_lib_macros::requires(x &lt; 16)]
+<pre><code class="language-rust noplaypen">#[hax_lib::requires(x &lt; 16)]
 fn square_requires(x: u8) -&gt; u8 {
     x * x
 }</code></pre>
@@ -280,7 +280,7 @@ that makes use of pre-conditions to prove panic freedom.</p>
 <p>Another solution for safe indexing is to use the <a href="https://matklad.github.io/2018/06/04/newtype-index-pattern.html">newtype index
 pattern</a>,
 which is <a href="https://github.com/hacspec/hax/blob/d668de4d17e5ddee3a613068dc30b71353a9db4f/tests/attributes/src/lib.rs#L98-L126">also supported by
-hax</a>. The chapter <a href="newtype.html">The newtype idiom</a> gives some.</p>
+hax</a>. The <a href="data-invariants.html#newtype-and-refinements">data invariants</a> chapter gives more details about this.</p>
 
                     </main>
 

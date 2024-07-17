@@ -183,8 +183,8 @@ panic freedom. After adding a precondition, the signature of the
 <em>return a value</em>: it will not panic or diverge. We could enrich the
 contract of <code>square</code> with a post-condition about the fact it is a
 increasing function:</p>
-<pre><code class="language-rust noplaypen">#[hax::requires(x &lt; 16)]
-#[hax::ensures(|result| result &gt;= x)]
+<pre><code class="language-rust noplaypen">#[hax_lib::requires(x &lt; 16)]
+#[hax_lib::ensures(|result| result &gt;= x)]
 fn square_ensures(x: u8) -&gt; u8 {
     x * x
 }</code></pre>
@@ -206,7 +206,7 @@ not.</p>
 <ul>
 <li><code>result ≡ value (mod FIELD_MODULUS)</code>;</li>
 <li>the absolute value of <code>result</code> is bound as follows:
-<code>|result| ≤ FIELD_MODULUS / 2 · (|value|/BARRETT_R + 1)</code>.</li>
+<code>|result| &lt; FIELD_MODULUS</code>.</li>
 </ul>
 <p>It is easy to write this contract directly as <code>hax::requires</code> and
 <code>hax::ensures</code> annotations, as shown in the snippet below.</p>
@@ -216,8 +216,8 @@ const BARRETT_SHIFT: i64 = 26;
 const BARRETT_R: i64 = 0x4000000; // 2^26
 const BARRETT_MULTIPLIER: i64 = 20159; // ⌊(BARRETT_R / FIELD_MODULUS) + 1/2⌋
 
-#[hax::requires((i64::from(value) &gt;= -BARRETT_R &amp;&amp; i64::from(value) &lt;= BARRETT_R))]
-#[hax::ensures(|result| result &gt; -FIELD_MODULUS &amp;&amp; result &lt; FIELD_MODULUS
+#[hax_lib::requires((i64::from(value) &gt;= -BARRETT_R &amp;&amp; i64::from(value) &lt;= BARRETT_R))]
+#[hax_lib::ensures(|result| result &gt; -FIELD_MODULUS &amp;&amp; result &lt; FIELD_MODULUS
                      &amp;&amp; result %  FIELD_MODULUS ==  value % FIELD_MODULUS)]
 fn barrett_reduce(value: i32) -&gt; i32 {
     let t = i64::from(value) * BARRETT_MULTIPLIER;
@@ -309,8 +309,8 @@ states the inverse property. The body is empty: the details of the
 proof itself are not relevant, at this stage, we only care about the
 statement. The proof will be completed manually in the proof
 assistant.</p>
-<pre><code class="language-rust noplaypen">#[hax::lemma]
-#[hax::requires(true)]
+<pre><code class="language-rust noplaypen">#[hax_lib::lemma]
+#[hax_lib::requires(true)]
 fn encrypt_decrypt_identity(
     key: u32,
     plaintext: u32,

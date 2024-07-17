@@ -232,9 +232,9 @@ extraction of this type <code>F</code> via hax will result in a type enforcing
 <code>v</code> small enough.</p>
 <pre><code class="language-rust noplaypen">pub const Q: u16 = 2347;
 
-#[hax::attributes]
+#[hax_lib::attributes]
 pub struct F {
-    #[refine(v &lt; Q)]
+    #[hax_lib::refine(v &lt; Q)]
     pub v: u16,
 }</code></pre>
 <pre><code class="language-ocaml">let v_Q: u16 = 2347us
