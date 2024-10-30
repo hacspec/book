@@ -26,21 +26,6 @@ function playground_text(playground, hidden = true) {
     }
 
     var playgrounds = Array.from(document.querySelectorAll(".playground"));
-    if (playgrounds.length > 0) {
-        fetch_with_timeout("https://play.rust-lang.org/meta/crates", {
-            headers: {
-                'Content-Type': "application/json",
-            },
-            method: 'POST',
-            mode: 'cors',
-        })
-        .then(response => response.json())
-        .then(response => {
-            // get list of crates available in the rust playground
-            let playground_crates = response.crates.map(item => item["id"]);
-            playgrounds.forEach(block => handle_crate_list_update(block, playground_crates));
-        });
-    }
 
     function handle_crate_list_update(playground_block, playground_crates) {
         // update the play buttons after receiving the response
@@ -99,11 +84,11 @@ function playground_text(playground, hidden = true) {
         }
     }
 
-    function run_rust_code(code_block) {
+    function run_rust_code(code_block, query = 'fstar') {
         var result_block = code_block.querySelector(".result");
         if (!result_block) {
             result_block = document.createElement('code');
-            result_block.className = 'result hljs language-bash';
+            result_block.className = 'result hljs language-fstar';
 
             code_block.append(result_block);
         }
@@ -127,27 +112,110 @@ function playground_text(playground, hidden = true) {
             params.version = "nightly";
         }
 
-        result_block.innerText = "Running...";
+        (async () => {
+            let raw_query = async (API_URL, hax_version, query, files, on_line_received) => {
+                let response = await fetch(`${API_URL}/query/${hax_version}/${query}`, {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(files),
+                });
+                
+                let decoder = new TextDecoder();
+                let leftover = "";
+                let reader = response.body.getReader();
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    leftover += decoder.decode(value);
+                    let lines = leftover.split('\n');
+                    let entire_lines = lines.slice(0, -1);
+                    leftover = lines.slice(-1)[0];
+                    for (const line of entire_lines)
+                        on_line_received(line);
+                }
+            };
 
-        fetch_with_timeout("https://play.rust-lang.org/evaluate.json", {
-            headers: {
-                'Content-Type': "application/json",
-            },
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify(params)
-        })
-        .then(response => response.json())
-        .then(response => {
-            if (response.result.trim() === '') {
-                result_block.innerText = "No output";
-                result_block.classList.add("result-no-output");
-            } else {
-                result_block.innerText = response.result;
-                result_block.classList.remove("result-no-output");
-            }
-        })
-        .catch(error => result_block.innerText = "Playground Communication: " + error.message);
+            let hax_version = '5ca1c13023200dee0cca6237901a3b5a69ad345a';
+            let playground_url = 'https://hax-playground.cryspen.com';
+            let ansi_up = new AnsiUp();
+            let first = true;
+            let logs = document.createElement('div');
+            logs.style = 'font-size: 80%; background: #00000010; padding: 3px;';
+            raw_query(
+                playground_url,
+                hax_version,
+                query,
+                [['src/lib.rs', text]],
+                x => {
+                    if(first) {
+                        result_block.innerText = "";
+                        result_block.appendChild(logs);
+                    }
+                    first = false;
+                    let json = {};
+                    try {
+                        json = JSON.parse(x);
+                    } catch(_){}
+                    if (json.Stderr || json.Stdout) {
+                        logs.innerHTML += '<div>' + ansi_up.ansi_to_html(json.Stderr || json.Stdout) + "</div>";
+                    }
+                    if (json.Done) {
+                        let out = [];
+                        for(let file in json.Done.files) {
+                            if(file.endsWith('.rs'))
+                                continue;
+                            let contents = json.Done.files[file];
+                            contents = contents.split('open FStar.Mul')[1].trim();
+                            contents = contents.replace(/$/gm, ' ').trim();
+                            out.push([file, contents]);
+                        }
+                        if(json.Done.success)
+                            result_block.innerText = "";
+                        else
+                            result_block.innerHTML += "<br/>";
+                        let result = document.createElement('div');
+                        if(out.length == 1) {
+                            result.innerText = out[0][1];
+                        } else {
+                            result.innerText = out.map(([file, s]) => '(* File: ' + file + ' *) \n' + s).join('\n\n').trim();
+                        }
+                        result_block.appendChild(result);
+                        if(json.Done.success && query.includes('+tc')) {
+                            result_block.innerHTML += '<div style="float: left; padding: 3px; padding-top: 8px; position: relative; top: 6px;"><span style="color: gray;">Status: </span><span style="color: green">✓ F* successfully typechecked!</span></div>';
+                        }
+                        hljs.highlightBlock(result);
+                        result_block.innerHTML += `<br/><a style="float:right; font-family: 'Open Sans', sans-serif; font-size: 70%; cursor: pointer; color: gray; text-transform: uppercase;" href='${playground_url}/#fstar/${hax_version}/${LZString.compressToEncodedURIComponent(text)}'>Open in hax playground ↗</a>`;
+                    }
+                },
+            );
+        })();
+        // result_block.innerText = "Running...";
+
+        // result_block.innerText = "HELLO, input was " + text;
+        // result_block.classList.add("result-no-output");
+
+        // fetch_with_timeout("https://play.rust-lang.org/evaluate.json", {
+        //     headers: {
+        //         'Content-Type': "application/json",
+        //     },
+        //     method: 'POST',
+        //     mode: 'cors',
+        //     body: JSON.stringify(params)
+        // })
+        // .then(response => response.json())
+        // .then(response => {
+        //     if (response.result.trim() === '') {
+        //         result_block.innerText = "No output";
+        //         result_block.classList.add("result-no-output");
+        //     } else {
+        //         result_block.innerText = response.result;
+        //         result_block.classList.remove("result-no-output");
+        //     }
+        // })
+        // .catch(error => result_block.innerText = "Playground Communication: " + error.message);
     }
 
     // Syntax highlighting Configuration
@@ -248,12 +316,23 @@ function playground_text(playground, hidden = true) {
         var runCodeButton = document.createElement('button');
         runCodeButton.className = 'fa fa-play play-button';
         runCodeButton.hidden = true;
-        runCodeButton.title = 'Run this code';
+        runCodeButton.title = 'Extract this code';
         runCodeButton.setAttribute('aria-label', runCodeButton.title);
 
-        buttons.insertBefore(runCodeButton, buttons.firstChild);
         runCodeButton.addEventListener('click', function (e) {
             run_rust_code(pre_block);
+        });
+        
+        var runVerifyButton = document.createElement('button');
+        runVerifyButton.className = 'fa fa-check check-button';
+        runVerifyButton.hidden = true;
+        runVerifyButton.title = 'Extract and typecheck this code';
+        runVerifyButton.setAttribute('aria-label', runCodeButton.title);
+        
+        buttons.insertBefore(runVerifyButton, buttons.firstChild);
+        buttons.insertBefore(runCodeButton, buttons.firstChild);
+        runVerifyButton.addEventListener('click', function (e) {
+            run_rust_code(pre_block, 'fstar+tc');
         });
 
         if (window.playground_copyable) {
