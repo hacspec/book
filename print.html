@@ -567,73 +567,149 @@ prove properties on them.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-the-proverif-backend-1"><a class="header" href="#using-the-proverif-backend-1">Using the ProVerif backend</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="troubleshootingfaq"><a class="header" href="#troubleshootingfaq">Troubleshooting/FAQ</a></h1>
 <p>This chapter captures a list of common questions or issues and how to resolve them. If you happen to run into an issue that is not documented here, please consider submitting a pull request!</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="the-include-flag-which-items-should-be-extracted-and-how"><a class="header" href="#the-include-flag-which-items-should-be-extracted-and-how">The include flag: which items should be extracted, and how?</a></h1>
-<p>Often, you need to extract only a portion of a crate. The subcommand
-<code>cargo hax into</code> accepts the <code>-i</code> flag which will help you to include
-or exclude items from the extraction.</p>
-<p>Consider the following <code>lib.rs</code> module of a crate named <code>mycrate</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rust-item-extraction-using-cargo-hax"><a class="header" href="#rust-item-extraction-using-cargo-hax"><strong>Rust Item Extraction Using <code>cargo hax</code></strong></a></h1>
+<h2 id="overview"><a class="header" href="#overview"><strong>Overview</strong></a></h2>
+<p>When extracting Rust items with hax, it is often necessary to include only a specific subset of items from a crate. The <code>cargo hax into</code> subcommand provides the <code>-i</code> flag to control which items are included or excluded, and how their dependencies are handled. This allows precise tailoring of the extraction process.</p>
+<h2 id="the--i-flag"><a class="header" href="#the--i-flag"><strong>The <code>-i</code> Flag</strong></a></h2>
+<p>The <code>-i</code> flag accepts a list of patterns with modifiers to define inclusion or exclusion rules for Rust items. Patterns are processed sequentially from left to right, determining which items are extracted.</p>
+<h3 id="basic-concepts"><a class="header" href="#basic-concepts"><strong>Basic Concepts</strong></a></h3>
+<ul>
+<li><strong>Patterns</strong>: Rust paths with support for <code>*</code> and <code>**</code> globs.
+<ul>
+<li><code>*</code> matches any single segment (e.g., <code>mycrate::*::myfn</code>).</li>
+<li><code>**</code> matches any subpath, including empty segments (e.g., <code>**::myfn</code>).</li>
+</ul>
+</li>
+<li><strong>Modifiers</strong>:
+<ul>
+<li><code>+</code>: Includes items and their dependencies (transitively).</li>
+<li><code>+~</code>: Includes items and their <strong>direct dependencies only</strong>.</li>
+<li><code>+!</code>: Includes only the item itself (no dependencies).</li>
+<li><code>+:</code>: Includes only the item's type signature (no body or dependencies).</li>
+<li><code>-</code>: Excludes items.</li>
+</ul>
+</li>
+</ul>
+<p>By default, <strong>all items are included</strong>, unless explicitly modified.</p>
+<h3 id="practical-examples-of-the--i-flag-usage"><a class="header" href="#practical-examples-of-the--i-flag-usage"><strong>Practical Examples of the <code>-i</code> Flag Usage</strong></a></h3>
+<p>Consider the following crate (<code>mycrate</code>) with the <code>lib.rs</code> module:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn interesting_function() { aux() }
 fn aux() { foo::f() }
-fn something_else() { ... }
+fn something_else() { /* ... */ }
+
 mod foo {
-  fn f() { ... }
-  fn g() { ... }
-  fn h() { ... }
-  fn interesting_function() { something() }
-  fn something() { ... }
-  mod bar {
-    fn interesting_function() { ... }
-  }
+    fn f() { /* ... */ }
+    fn g() { /* ... */ }
+    fn h() { /* ... */ }
+    fn interesting_function() { something() }
+    fn something() { /* ... */ }
+
+    mod bar {
+        fn interesting_function() { /* ... */ }
+    }
 }
+
 fn not_that_one() { not_that_one_dependency() }
-fn not_that_one_dependency() { ... }
+fn not_that_one_dependency() { /* ... */ }
+
+fn not_extracting_function(_: u8) -&gt; u8 {
+    unsafe { /* ... */ }
+    0
+}
 <span class="boring">}</span></code></pre></pre>
-<p>Here are a few examples of the <code>-i</code> flag.</p>
+<h4 id="1-selectively-including-items-with-dependencies"><a class="header" href="#1-selectively-including-items-with-dependencies"><strong>1. Selectively Including Items with Dependencies</strong></a></h4>
+<pre><code class="language-bash">cargo hax into -i '-** +mycrate::**::interesting_function' &lt;BACKEND&gt;
+</code></pre>
 <ul>
-<li><code>cargo hax into -i '-** +mycrate::**::interesting_function' &lt;BACKEND&gt;</code><br />
-The first clause <code>-**</code> makes items not to be extracted by default.<br />
-This extracts any item that matches the <a href="https://en.wikipedia.org/wiki/Glob_(programming)">glob pattern</a> <code>mycrate::**::interesting_function</code>, but also any (local) dependencies of such items. <code>**</code> matches any sub-path.<br />
-Thus, the following items will be extracted:
+<li><strong>Explanation</strong>:
 <ul>
-<li><code>mycrate::interesting_function</code> (direct match);</li>
-<li><code>mycrate::foo::interesting_function</code> (direct match);</li>
-<li><code>mycrate::foo::bar::interesting_function</code> (direct match);</li>
-<li><code>mycrate::aux</code> (dependency of <code>mycrate::interesting_function</code>);</li>
-<li><code>mycrate::foo::f</code> (dependency of <code>mycrate::aux</code>);</li>
-<li><code>mycrate::foo::something</code> (dependency of <code>mycrate::foo::interesting_function</code>).</li>
+<li><code>-**</code>: Excludes all items by default.</li>
+<li><code>+mycrate::**::interesting_function</code>: Includes all items matching <code>mycrate::**::interesting_function</code> and their dependencies.</li>
 </ul>
 </li>
-<li><code>cargo hax into -i '+** -*::not_that_one' &lt;BACKEND&gt;</code><br />
-Extracts any item but the ones named <code>&lt;crate&gt;::not_that_one</code>. Here,
-everything is extracted but <code>mycrate::not_that_one</code>, including
-<code>mycrate::not_that_one_dependency</code>.</li>
-<li><code>cargo hax into -i '-** +!mycrate::interesting_function' &lt;BACKEND&gt;</code><br />
-Extracts only <code>mycrate::interesting_function</code>, not taking into
-account dependencies.</li>
-<li><code>cargo hax into -i '-** +~mycrate::interesting_function' &lt;BACKEND&gt;</code><br />
-Extracts <code>mycrate::interesting_function</code> and its direct
-dependencies (no transitivity): this includes <code>mycrate::aux</code>, but
-not <code>mycrate::foo::f</code>.</li>
+<li><strong>Extracted Items</strong>:
+<ol>
+<li><code>mycrate::interesting_function</code> (direct match).</li>
+<li><code>mycrate::foo::interesting_function</code> (direct match).</li>
+<li><code>mycrate::foo::bar::interesting_function</code> (direct match).</li>
+<li><code>mycrate::aux</code> (dependency of <code>mycrate::interesting_function</code>).</li>
+<li><code>mycrate::foo::f</code> (dependency of <code>mycrate::aux</code>).</li>
+<li><code>mycrate::foo::something</code> (dependency of <code>mycrate::foo::interesting_function</code>).</li>
+</ol>
+</li>
 </ul>
-<p>Now, suppose we add the function <code>not_extracting_function</code>
-below. <code>not_extracting_function</code> uses some unsafe code: this is not
-supported by hax. However, let's suppose we have a functional model
-for this function and that we still want to extract it as an
-axiomatized, assumed symbol.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn not_extracting_function(u8) -&gt; u8 {
-    ... 
-    unsafe { ... }
-    ...
-}
-<span class="boring">}</span></code></pre></pre>
+<h4 id="2-excluding-specific-items"><a class="header" href="#2-excluding-specific-items"><strong>2. Excluding Specific Items</strong></a></h4>
+<pre><code class="language-bash">cargo hax into -i '+** -*::not_that_one' &lt;BACKEND&gt;
+</code></pre>
 <ul>
-<li><code>cargo hax into -i '+:mycrate::not_extracting_function' &lt;BACKEND&gt;</code><br />
-Extracts <code>mycrate::not_extracting_function</code> in signature-only mode.</li>
+<li><strong>Explanation</strong>:
+<ul>
+<li><code>+**</code>: Includes all items by default.</li>
+<li><code>-*::not_that_one</code>: Excludes any item named <code>not_that_one</code>, but keeps all other items, including <code>not_that_one_dependency</code>.</li>
 </ul>
+</li>
+<li><strong>Extracted Items</strong>: All except <code>mycrate::not_that_one</code>.</li>
+</ul>
+<h4 id="3-including-items-without-dependencies"><a class="header" href="#3-including-items-without-dependencies"><strong>3. Including Items Without Dependencies</strong></a></h4>
+<pre><code class="language-bash">cargo hax into -i '-** +!mycrate::interesting_function' &lt;BACKEND&gt;
+</code></pre>
+<ul>
+<li><strong>Explanation</strong>:
+<ul>
+<li><code>-**</code>: Excludes all items by default.</li>
+<li><code>+!mycrate::interesting_function</code>: Includes only <code>mycrate::interesting_function</code>, without dependencies.</li>
+</ul>
+</li>
+<li><strong>Extracted Items</strong>: Only <code>mycrate::interesting_function</code>.</li>
+</ul>
+<h4 id="4-including-items-with-direct-dependencies-only"><a class="header" href="#4-including-items-with-direct-dependencies-only"><strong>4. Including Items with Direct Dependencies Only</strong></a></h4>
+<pre><code class="language-bash">cargo hax into -i '-** +~mycrate::interesting_function' &lt;BACKEND&gt;
+</code></pre>
+<ul>
+<li><strong>Explanation</strong>:
+<ul>
+<li><code>-**</code>: Excludes all items by default.</li>
+<li><code>+~mycrate::interesting_function</code>: Includes <code>mycrate::interesting_function</code> and its direct dependencies (but not their transitive dependencies).</li>
+</ul>
+</li>
+<li><strong>Extracted Items</strong>:
+<ol>
+<li><code>mycrate::interesting_function</code>.</li>
+<li><code>mycrate::aux</code> (direct dependency).</li>
+</ol>
+</li>
+<li><strong>Excluded Items</strong>:
+<ul>
+<li><code>mycrate::foo::f</code> (transitive dependency of <code>mycrate::aux</code>).</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-including-items-in-signature-only-mode"><a class="header" href="#5-including-items-in-signature-only-mode"><strong>5. Including Items in Signature-Only Mode</strong></a></h4>
+<pre><code class="language-bash">cargo hax into -i '+:mycrate::not_extracting_function' &lt;BACKEND&gt;
+</code></pre>
+<ul>
+<li><strong>Explanation</strong>:
+<ul>
+<li><code>+:mycrate::not_extracting_function</code>: Includes only the type signature of <code>mycrate::not_extracting_function</code> (e.g., as an assumed or axiomatized symbol).</li>
+</ul>
+</li>
+<li><strong>Extracted Items</strong>:
+<ul>
+<li>The type signature of <code>mycrate::not_extracting_function</code>, without its body or dependencies.</li>
+</ul>
+</li>
+</ul>
+<h3 id="summary"><a class="header" href="#summary"><strong>Summary</strong></a></h3>
+<p>The <code>-i</code> flag offers powerful control over extraction, allowing fine-grained inclusion and exclusion of items with various dependency handling strategies. Use it to:</p>
+<ul>
+<li>Extract specific items and their dependencies (<code>+</code> or <code>+~</code>).</li>
+<li>Exclude certain items (<code>-</code>).</li>
+<li>Include items without dependencies (<code>+!</code>).</li>
+<li>Extract type signatures only (<code>+:</code>).</li>
+</ul>
+<p>For complex crates, this flexibility ensures only the necessary parts are extracted, optimizing analysis or transformation workflows.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="libraries"><a class="header" href="#libraries">Libraries</a></h1>
 <h1 id="macros-and-attributes"><a class="header" href="#macros-and-attributes">Macros and attributes</a></h1>
 <p>The hax engine understands only one attribute: <code>#[_hax::json(PAYLOAD)]</code>,
