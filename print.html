@@ -349,11 +349,11 @@ fn square_requires(x: u8) -&gt; u8 {
     x * x
 }</code></pre></pre>
 <p>With this precondition, F* is able to prove panic freedom. From now
-on, it is the responsability of the clients of <code>square</code> to respect the
+on, it is the responsibility of the clients of <code>square</code> to respect the
 contact. The next step is thus be to verify, through hax extraction,
 that <code>square</code> is used correctly at every call site.</p>
 <h2 id="common-panicking-situations"><a class="header" href="#common-panicking-situations">Common panicking situations</a></h2>
-<p>Mutipication is not the only panicking function provided by the Rust
+<p>Multiplication is not the only panicking function provided by the Rust
 library: most of the other integer arithmetic operation have such
 informal assumptions.</p>
 <p>Another source of panics is indexing. Indexing in an array, a slice or
@@ -379,7 +379,7 @@ fn square_ensures(x: u8) -&gt; u8 {
     x * x
 }</code></pre></pre>
 <p>Such a simple post-condition is automatically proven by F*. The
-properties of our <code>square</code> function are not fasinating. Let's study a
+properties of our <code>square</code> function are not fascinating. Let's study a
 more interesting example: <a href="https://en.wikipedia.org/wiki/Barrett_reduction">Barrett reduction</a>.</p>
 <h2 id="a-concrete-example-of-contract-barrett-reduction"><a class="header" href="#a-concrete-example-of-contract-barrett-reduction">A concrete example of contract: Barrett reduction</a></h2>
 <p>While the correctness of <code>square</code> is obvious, the Barrett reduction is
@@ -438,7 +438,7 @@ further formal verification and for documentation purposes.</p>
 <h2 id="extrinsic-properties-with-lemmas"><a class="header" href="#extrinsic-properties-with-lemmas">Extrinsic properties with lemmas</a></h2>
 <p>Consider the <code>encrypt</code> and <code>decrypt</code> functions below. Those functions
 have no precondition, don't have particularly interesting properties
-individually. However, the compostion of the two yields an useful
+individually. However, the composition of the two yields an useful
 property: encrypting a ciphertext and decrypting the result with a
 same key produces the ciphertext again. <code>|c| decrypt(c, key)</code> is the
 inverse of <code>|p| encrypt(p, key)</code>.</p>
@@ -508,7 +508,7 @@ functions</a> on <code>F₃</code>
 elements. We dropped altogether a source of panic!</p>
 <p>Soon you want to work with a bigger finite field: say
 <code>F₂₃₄₇</code>. Representing this many <code>q</code> different elements with an Rust
-enum would be very painful... The <code>enum</code> apporach falls appart.</p>
+enum would be very painful... The <code>enum</code> approach falls apart.</p>
 <h3 id="newtype-and-refinements"><a class="header" href="#newtype-and-refinements">Newtype and refinements</a></h3>
 <p>Since we don't want an <code>enum</code> with 2347 elements, we have to revert to
 a type that can hold this many elements. The smallest integer type
@@ -550,7 +550,7 @@ impl Add for F {
 }</code></pre></pre>
 <p>Here, F* is able to prove automatically that (1) the addition doesn't
 overflow and (2) that the invariant of <code>F</code> is preserved. The
-definition of type <code>F</code> in F* (named <code>t_F</code>) very explicitely requires
+definition of type <code>F</code> in F* (named <code>t_F</code>) very explicitly requires
 the invariant as a refinement on <code>v</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="examples"><a class="header" href="#examples">Examples</a></h1>
 <p>This chapter contains various examples that demonstrates how hax can

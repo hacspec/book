@@ -190,7 +190,7 @@ fn square_ensures(x: u8) -&gt; u8 {
     x * x
 }</code></pre></pre>
 <p>Such a simple post-condition is automatically proven by F*. The
-properties of our <code>square</code> function are not fasinating. Let's study a
+properties of our <code>square</code> function are not fascinating. Let's study a
 more interesting example: <a href="https://en.wikipedia.org/wiki/Barrett_reduction">Barrett reduction</a>.</p>
 <h2 id="a-concrete-example-of-contract-barrett-reduction"><a class="header" href="#a-concrete-example-of-contract-barrett-reduction">A concrete example of contract: Barrett reduction</a></h2>
 <p>While the correctness of <code>square</code> is obvious, the Barrett reduction is
@@ -249,7 +249,7 @@ further formal verification and for documentation purposes.</p>
 <h2 id="extrinsic-properties-with-lemmas"><a class="header" href="#extrinsic-properties-with-lemmas">Extrinsic properties with lemmas</a></h2>
 <p>Consider the <code>encrypt</code> and <code>decrypt</code> functions below. Those functions
 have no precondition, don't have particularly interesting properties
-individually. However, the compostion of the two yields an useful
+individually. However, the composition of the two yields an useful
 property: encrypting a ciphertext and decrypting the result with a
 same key produces the ciphertext again. <code>|c| decrypt(c, key)</code> is the
 inverse of <code>|p| encrypt(p, key)</code>.</p>

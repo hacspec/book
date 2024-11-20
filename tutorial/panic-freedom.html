@@ -254,11 +254,11 @@ fn square_requires(x: u8) -&gt; u8 {
     x * x
 }</code></pre></pre>
 <p>With this precondition, F* is able to prove panic freedom. From now
-on, it is the responsability of the clients of <code>square</code> to respect the
+on, it is the responsibility of the clients of <code>square</code> to respect the
 contact. The next step is thus be to verify, through hax extraction,
 that <code>square</code> is used correctly at every call site.</p>
 <h2 id="common-panicking-situations"><a class="header" href="#common-panicking-situations">Common panicking situations</a></h2>
-<p>Mutipication is not the only panicking function provided by the Rust
+<p>Multiplication is not the only panicking function provided by the Rust
 library: most of the other integer arithmetic operation have such
 informal assumptions.</p>
 <p>Another source of panics is indexing. Indexing in an array, a slice or
