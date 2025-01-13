@@ -92,7 +92,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="quick_start/intro.html"><strong aria-hidden="true">2.</strong> Quick start</a></li><li class="chapter-item expanded "><a href="tutorial/index.html"><strong aria-hidden="true">3.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/panic-freedom.html"><strong aria-hidden="true">3.1.</strong> Panic freedom</a></li><li class="chapter-item expanded "><a href="tutorial/properties.html"><strong aria-hidden="true">3.2.</strong> Properties on functions</a></li><li class="chapter-item expanded "><a href="tutorial/data-invariants.html"><strong aria-hidden="true">3.3.</strong> Data invariants</a></li></ol></li><li class="chapter-item expanded "><a href="examples/intro.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="examples/rust-by-examples/intro.html"><strong aria-hidden="true">4.1.</strong> Rust By Example</a></li><li class="chapter-item expanded "><a href="examples/fstar/intro.html"><strong aria-hidden="true">4.2.</strong> Using the F* backend</a></li><li class="chapter-item expanded "><a href="examples/coq/intro.html"><strong aria-hidden="true">4.3.</strong> Using the Coq backend</a></li><li class="chapter-item expanded "><a href="examples/coq/intro.html"><strong aria-hidden="true">4.4.</strong> Using the ProVerif backend</a></li></ol></li><li class="chapter-item expanded "><a href="faq/intro.html"><strong aria-hidden="true">5.</strong> Troubleshooting/FAQ</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="faq/include-flags.html"><strong aria-hidden="true">5.1.</strong> The include flag: which items should be extracted, and how?</a></li></ol></li><li class="chapter-item expanded "><a href="contributing/intro.html"><strong aria-hidden="true">6.</strong> Contributing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="contributing/architecture.html"><strong aria-hidden="true">6.1.</strong> Architecture</a></li><li class="chapter-item expanded "><a href="contributing/libraries_macros.html"><strong aria-hidden="true">6.2.</strong> Libraries & Macros</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="misc/archive.html">Archive</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="quick_start/intro.html"><strong aria-hidden="true">2.</strong> Quick start</a></li><li class="chapter-item expanded "><a href="tutorial/index.html"><strong aria-hidden="true">3.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tutorial/panic-freedom.html"><strong aria-hidden="true">3.1.</strong> Panic freedom</a></li><li class="chapter-item expanded "><a href="tutorial/properties.html"><strong aria-hidden="true">3.2.</strong> Properties on functions</a></li><li class="chapter-item expanded "><a href="tutorial/data-invariants.html"><strong aria-hidden="true">3.3.</strong> Data invariants</a></li></ol></li><li class="chapter-item expanded "><a href="examples/intro.html"><strong aria-hidden="true">4.</strong> Examples</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="examples/rust-by-examples/intro.html"><strong aria-hidden="true">4.1.</strong> Rust By Example</a></li><li class="chapter-item expanded "><a href="examples/fstar/intro.html"><strong aria-hidden="true">4.2.</strong> Using the F* backend</a></li><li class="chapter-item expanded "><a href="examples/coq/intro.html"><strong aria-hidden="true">4.3.</strong> Using the Coq backend</a></li><li class="chapter-item expanded "><a href="examples/coq/intro.html"><strong aria-hidden="true">4.4.</strong> Using the ProVerif backend</a></li></ol></li><li class="chapter-item expanded "><a href="faq/intro.html"><strong aria-hidden="true">5.</strong> Troubleshooting/FAQ</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="faq/include-flags.html"><strong aria-hidden="true">5.1.</strong> The include flag: which items should be extracted, and how?</a></li></ol></li><li class="chapter-item expanded "><a href="contributing/intro.html"><strong aria-hidden="true">6.</strong> Contributing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="contributing/architecture.html"><strong aria-hidden="true">6.1.</strong> Architecture</a></li><li class="chapter-item expanded "><a href="contributing/libraries_macros.html"><strong aria-hidden="true">6.2.</strong> Libraries & Macros</a></li><li class="chapter-item expanded "><a href="contributing/ast_ebnf.html"><strong aria-hidden="true">6.3.</strong> AST/EBNF</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="misc/archive.html">Archive</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -796,6 +796,235 @@ that defines nice and simple-to-use macros. Those macro take care of
 cooking some <code>hax_lib_macros_types::AttrPayload</code> payload(s), then
 serialize those payloads to JSON and produce one or more
 <code>#[_hax::json(serialized_payload)]</code> attributes.</p>
+<div style="break-before: page; page-break-before: always;"></div><p>We currently take inputs from the following AST (visualization can be done
+using <a href="https://rr.red-dove.com/ui">https://rr.red-dove.com/ui</a>). Literals are strings, numbers and
+booleans.</p>
+<pre><code class="language-ebnf">char ::= [a-zA-Z]
+string ::= char*
+digit ::= [0-9]
+uint ::= digit+
+int ::= ("-")? uint
+float ::= int (".")? uint
+bool ::= "true" | "false"
+
+local_var ::= ident
+global_var ::= rust-path-identifier
+
+literal ::=
+| '"' string '"'
+| "'" char "'"
+| int
+| float (* [a] *)
+| bool
+</code></pre>
+<p>We support a number of simple types characters, strings, booleans and
+numbers. Number types for integers (8,16,32,64,128 bit or machine sized)
+and floats (16,32, or 64 bit). Composite types are tuples, fixed length
+lists (arrays), variable length lists (vectors/slices), ptr types, and
+function types. Lastly we have named types defined by items, e.g. enums
+and structs.</p>
+<pre><code class="language-ebnf">ty ::=
+| "bool"
+| "char"
+| "u8" | "u16" | "u32" | "u64"
+| "u128" | "usize"
+| "i8" | "i16" | "i32" | "i64"
+| "i128" | "isize"
+| "f16" | "f32" | "f64"  (* [a] *)
+| "str"
+| (ty ",")*
+| "[" ty ";" int "]"
+| "[" ty "]"
+| "*const" ty | "*mut" ty  (* [b] *)
+| "*" expr | "*mut" expr  (* [b] *)
+| ident
+| (ty "-&gt;")* ty
+| "dyn" (goal)+ (* [c] *)
+</code></pre>
+<p>The patterns allowed reflect these types. Wildcard patterns, literal
+types, typed patterns, list patterns, record or tuple patterns.</p>
+<pre><code class="language-ebnf">pat ::=
+| "_"
+| ident "{" (ident ":" pat ";")* "}"
+| ident "(" (pat ",")* ")"
+| (pat "|")* pat
+| "[" (pat ",")* "]"  (* [d] *)
+| "&amp;" pat
+| literal
+| ("&amp;")? ("mut")? ident ("@" pat)?  (* [e] *)
+</code></pre>
+<p>The simple expressions are literals, local or global variables, type
+casts, assignments and lists. Control flow expressions, if statements,
+match statements, loops, return, break and continue. The rest is blocks,
+macro calls, lambda functions and borrowing.</p>
+<pre><code class="language-ebnf">expr ::=
+| "if" expr "{" expr "}" ("else" "{" expr "}")?
+| "if" "let" pat (":" ty)? "=" expr "{" expr "}" ("else" "{" expr "}")?
+| expr "(" (expr ",")* ")"
+| literal
+| "[" (expr ",")* "]" | "[" expr ";" int "]"
+| ident "{" (ident ":"expr ";")* "}"
+| ident "{" (ident ":"expr ";")* ".." expr "}"
+| "match" expr guard "{"
+(("|" pat)* "=&gt;" (expr "," | "{" expr "}"))*
+"}"
+| "let" pat (":" ty)? "=" expr ";" expr
+| "let" pat (":" ty)? "=" expr "else" "{" expr "}" ";" expr
+| modifiers "{" expr "}"
+| local_var
+| global_var
+| expr "as" ty
+| "loop" "{" expr "}"
+| "while" "(" expr ")" "{" expr "}"
+| "for" "(" pat "in" expr ")" "{" expr "}"
+| "for" "(" "let" ident "in" expr ".." expr ")" "{" expr "}"
+| "break" expr
+| "continue"
+| pat "=" expr
+| "return" expr
+| expr "?"
+| "&amp;" ("mut")? expr  (* [e] *)
+| "&amp;" expr "as" "&amp;const _"  (* [b] *)
+| "&amp;mut" expr "as" "&amp;mut _"
+| "|" pat "|" expr
+</code></pre>
+<p>The items supported are functions, type aliasing, enums, structs, trait
+definitions and implementations, and imports.</p>
+<pre><code class="language-ebnf">item ::=
+| "const" ident "=" expr
+| "static" ident "=" expr  (* [b] *)
+| modifiers "fn" ident ("&lt;" (generics ",")* "&gt;")? "(" (pat ":" ty ",")* ")" (":" ty)? "{" expr "}"
+| "type" ident "=" ty
+| "enum" ident ("&lt;" (generics ",")* "&gt;")? "{" (ident ("(" (ty)* ")")? ",")* "}"
+| "struct" ident ("&lt;" (generics ",")* "&gt;")? "{" (ident ":" ty ",")* "}"
+| "trait" ident ("&lt;" (generics ",")* "&gt;")? "{" (trait_item)* "}"
+| "impl" ("&lt;" (generics ",")* "&gt;")? ident "for" ty "{" (impl_item)* "}"
+| "mod" ident "{" (item)* "}"
+| "use" path ";"
+</code></pre>
+<h2 id="full-ebnf"><a class="header" href="#full-ebnf">Full eBNF</a></h2>
+<pre><code class="language-ebnf">char ::= [a-zA-Z]
+string ::= char*
+digit ::= [0-9]
+uint ::= digit+
+int ::= ("-")? uint
+float ::= int (".")? uint
+bool ::= "true" | "false"
+
+local_var ::= ident
+global_var ::= rust-path-identifier
+
+literal ::=
+| '"' string '"'
+| "'" char "'"
+| int
+| float  [a]
+| bool
+
+generic_value ::=
+| "'" ident
+| ty
+| expr
+
+goal ::=
+| ident "&lt;" (generic_value ",")* "&gt;"
+
+ty ::=
+| "bool"
+| "char"
+| "u8" | "u16" | "u32" | "u64"
+| "u128" | "usize"
+| "i8" | "i16" | "i32" | "i64"
+| "i128" | "isize"
+| "f16" | "f32" | "f64"  (* [a] *)
+| "str"
+| (ty ",")*
+| "[" ty ";" int "]"
+| "[" ty "]"
+| "*const" ty | "*mut" ty  (* [b] *)
+| "*" expr | "*mut" expr  (* [b] *)
+| ident
+| (ty "-&gt;")* ty
+| "dyn" (goal)+ (* [c] *)
+
+pat ::=
+| "_"
+| ident "{" (ident ":" pat ";")* "}"
+| ident "(" (pat ",")* ")"
+| (pat "|")* pat
+| "[" (pat ",")* "]"  (* [d] *)
+| "&amp;" pat
+| literal
+| ("&amp;")? ("mut")? ident ("@" pat)?  (* [e] *)
+
+modifiers ::=
+| ""
+| "unsafe" modifiers
+| "const" modifiers
+| "async" modifiers  (* [b] *)
+
+guard ::=
+| "if" "let" pat (":" ty)? "=" expr
+
+expr ::=
+| "if" expr "{" expr "}" ("else" "{" expr "}")?
+| "if" "let" pat (":" ty)? "=" expr "{" expr "}" ("else" "{" expr "}")?
+| expr "(" (expr ",")* ")"
+| literal
+| "[" (expr ",")* "]" | "[" expr ";" int "]"
+| ident "{" (ident ":"expr ";")* "}"
+| ident "{" (ident ":"expr ";")* ".." expr "}"
+| "match" expr guard "{"
+(("|" pat)* "=&gt;" (expr "," | "{" expr "}"))*
+"}"
+| "let" pat (":" ty)? "=" expr ";" expr
+| "let" pat (":" ty)? "=" expr "else" "{" expr "}" ";" expr
+| modifiers "{" expr "}"
+| local_var
+| global_var
+| expr "as" ty
+| "loop" "{" expr "}"
+| "while" "(" expr ")" "{" expr "}"
+| "for" "(" pat "in" expr ")" "{" expr "}"
+| "for" "(" "let" ident "in" expr ".." expr ")" "{" expr "}"
+| "break" expr
+| "continue"
+| pat "=" expr
+| "return" expr
+| expr "?"
+| "&amp;" ("mut")? expr  (* [e] *)
+| "&amp;" expr "as" "&amp;const _"  (* [b] *)
+| "&amp;mut" expr "as" "&amp;mut _"
+| "|" pat "|" expr
+
+impl_item ::=
+| "type" ident "=" ty ";"
+| modifiers "fn" ident ("&lt;" (generics ",")* "&gt;")? "(" (pat ":" ty ",")* ")" (":" ty)? "{" expr "}"
+
+trait_item ::=
+| "type" ident ";"
+| modifiers "fn" ident ("&lt;" (generics ",")* "&gt;")? "(" (pat ":" ty ",")* ")" (":" ty)? ("{" expr "}" | ";")
+
+item ::=
+| "const" ident "=" expr
+| "static" ident "=" expr  (* [b] *)
+| modifiers "fn" ident ("&lt;" (generics ",")* "&gt;")? "(" (pat ":" ty ",")* ")" (":" ty)? "{" expr "}"
+| "type" ident "=" ty
+| "enum" ident ("&lt;" (generics ",")* "&gt;")? "{" (ident ("(" (ty)* ")")? ",")* "}"
+| "struct" ident ("&lt;" (generics ",")* "&gt;")? "{" (ident ":" ty ",")* "}"
+| "trait" ident ("&lt;" (generics ",")* "&gt;")? "{" (trait_item)* "}"
+| "impl" ("&lt;" (generics ",")* "&gt;")? ident "for" ty "{" (impl_item)* "}"
+| "mod" ident "{" (item)* "}"
+| "use" path ";"
+</code></pre>
+<h2 id="footnotes"><a class="header" href="#footnotes">Footnotes</a></h2>
+<ul>
+<li><strong>[a]</strong> no support yet for raw pointers, async/await, static, extern, or union types</li>
+<li><strong>[b]</strong> partial support for nested matching and range patterns</li>
+<li><strong>[c]</strong> partial support for mutable borrows</li>
+<li><strong>[d]</strong> most backends lack support for dynamic dispatch, floating point operations</li>
+<li><strong>[e]</strong> some backends only handle specific forms of iterators</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="warning-this-book-is-currently-being-rewritten"><a class="header" href="#warning-this-book-is-currently-being-rewritten">Warning: this book is currently being rewritten!</a></h1>
 <p>hax is the successor of hacspec. You can find the previous book
 describing hacspec <a href="misc/../archive/index.html">here</a>, but keep in mind most of the information
